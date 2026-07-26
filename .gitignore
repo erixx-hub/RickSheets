@@ -4,6 +4,9 @@
 /.flatpak-builder/
 /dist/
 /.cache/
+/website/.next/
+/website/.open-next/
+/website/node_modules/
 /.agents/
 /.codex/
 *.user
