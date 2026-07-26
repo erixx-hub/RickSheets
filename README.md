@@ -29,15 +29,17 @@ the detected song, correct lyrics and chords, and export a dependable PDF.
 
 ## Current status
 
-The Linux AppImage and the core import/edit/export workflow are functional and
-covered by automated tests. RickSheets has also been regression-tested locally
-against 22 different source PDFs. Those source documents and user-created
-chord sheets are intentionally not part of this public repository.
+The Linux AppImage and Flatpak bundle are functional. An automated Windows
+build produces both a portable ZIP and a conventional installer. The core
+import/edit/export workflow is covered by automated tests and has also been
+regression-tested locally against 22 different source PDFs. Those source
+documents and user-created chord sheets are intentionally not part of this
+public repository.
 
 Current limitations:
 
 - Scanned image-only PDFs require OCR, which is not implemented yet.
-- Linux is the currently tested and packaged platform.
+- The Windows packages still need a final smoke test on a real Windows system.
 - Fine-grained manual control over page and column breaks is still planned.
 
 ## Building on Linux
@@ -75,9 +77,13 @@ opening and exporting files uses the desktop file chooser.
 
 ## Windows
 
-RickSheets uses portable Qt 6 and C++20 code, but the Windows package is not
-yet part of the tested release process. A Windows build requires Qt 6, CMake,
-Ninja, a C++20 compiler and Poppler:
+The `Windows packages` GitHub Actions workflow builds a portable ZIP and an
+Inno Setup installer on a Windows runner. Both contain Qt and the two Poppler
+utilities required for PDF import, so end users do not need to install
+dependencies separately.
+
+A local development build requires Qt 6, CMake, Ninja, a C++20 compiler and
+Poppler:
 
 ```powershell
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
@@ -86,8 +92,9 @@ ctest --test-dir build --output-on-failure
 build\ricksheets.exe
 ```
 
-The final standalone package will additionally require `windeployqt` and the
-Poppler command-line tools.
+Release packages are built manually from the Actions tab or automatically for
+version tags. Dependencies and build actions are pinned, and the downloaded
+Poppler archive is verified by SHA-256.
 
 ## Input format
 
@@ -128,7 +135,7 @@ src/renderer.*      Shared preview and PDF layout
 src/previewwidget.* A4 page preview and PDF export
 src/mainwindow.*    Desktop user interface
 tests/              Automated core and UI tests
-packaging/          Linux desktop, Flatpak and AppImage packaging
+packaging/          Linux, Flatpak, AppImage and Windows packaging
 ```
 
 ## Roadmap and contributions

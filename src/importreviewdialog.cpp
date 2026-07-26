@@ -90,7 +90,10 @@ public:
 private:
     void render(const QString &pdfFileName)
     {
-        const QString renderer = QStandardPaths::findExecutable("pdftoppm");
+        QString renderer = QStandardPaths::findExecutable(
+            "pdftoppm", {QCoreApplication::applicationDirPath()});
+        if (renderer.isEmpty())
+            renderer = QStandardPaths::findExecutable("pdftoppm");
         if (renderer.isEmpty() || !m_temporaryDirectory.isValid()) {
             showError(tr("PDF-Seitenvorschau ist nicht verfügbar."));
             return;

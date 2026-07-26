@@ -272,6 +272,14 @@ int main(int argc, char *argv[])
         return 0;
 
     MainWindow window;
+    const QStringList arguments = application.arguments();
+    if (arguments.size() > 1) {
+        const QFileInfo document(arguments.at(1));
+        if (document.isFile() &&
+            document.suffix().compare("ricksheet", Qt::CaseInsensitive) == 0) {
+            window.openDocument(document.absoluteFilePath());
+        }
+    }
     window.show();
     return application.exec();
 }

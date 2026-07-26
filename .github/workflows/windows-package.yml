@@ -1,0 +1,124 @@
+name: Windows packages
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+env:
+  QT_VERSION: "6.8.3"
+  POPPLER_VERSION: "26.02.0-0"
+  POPPLER_SHA256: "993e4a94376ed712fafc7058d724ea0b943d118bbd2305cd9ed55174eb85cda5"
+
+jobs:
+  package:
+    runs-on: windows-2022
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@48d3ad6db93f3627c8ee7a0454bc6f3744f7e730 # v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: win64_msvc2022_64
+          cache: true
+
+      - name: Configure
+        shell: pwsh
+        run: cmake -S . -B build-windows -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$pwd/dist/windows/RickSheets"
+
+      - name: Build and test
+        shell: pwsh
+        run: |
+          cmake --build build-windows
+          ctest --test-dir build-windows --output-on-failure
+
+      - name: Install application
+        shell: pwsh
+        run: cmake --install build-windows
+
+      - name: Deploy Qt runtime
+        shell: pwsh
+        run: |
+          $appDir = "$pwd/dist/windows/RickSheets"
+          windeployqt --release --compiler-runtime --no-opengl-sw "$appDir/ricksheets.exe"
+          Copy-Item LICENSE "$appDir/LICENSE.txt"
+
+      - name: Add pinned Poppler utilities
+        shell: pwsh
+        run: |
+          $archive = "$env:RUNNER_TEMP/poppler.zip"
+          $url = "https://github.com/oschwartz10612/poppler-windows/releases/download/v$env:POPPLER_VERSION/Release-$env:POPPLER_VERSION.zip"
+          Invoke-WebRequest -Uri $url -OutFile $archive
+          $actualHash = (Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actualHash -ne $env:POPPLER_SHA256) {
+            throw "Poppler archive checksum mismatch: $actualHash"
+          }
+          $unpackDir = "$env:RUNNER_TEMP/poppler"
+          Expand-Archive -Path $archive -DestinationPath $unpackDir
+          $root = Get-ChildItem $unpackDir -Directory | Select-Object -First 1
+          $appDir = "$pwd/dist/windows/RickSheets"
+          Copy-Item "$($root.FullName)/Library/bin/*" $appDir -Recurse -Force
+          Copy-Item "$($root.FullName)/share" "$appDir/share" -Recurse -Force
+
+      - name: Verify portable package
+        shell: pwsh
+        run: |
+          $appDir = "$pwd/dist/windows/RickSheets"
+          $required = @(
+            "ricksheets.exe",
+            "Qt6Core.dll",
+            "platforms/qwindows.dll",
+            "pdftotext.exe",
+            "pdftoppm.exe",
+            "share/poppler/COPYING",
+            "LICENSE.txt"
+          )
+          foreach ($relativePath in $required) {
+            if (-not (Test-Path "$appDir/$relativePath")) {
+              throw "Missing package file: $relativePath"
+            }
+          }
+          & "$appDir/pdftotext.exe" -v
+          & "$appDir/pdftoppm.exe" -v
+
+      - name: Determine package version
+        id: version
+        shell: pwsh
+        run: |
+          $cmake = Get-Content CMakeLists.txt -Raw
+          if ($cmake -notmatch 'project\(RickSheets VERSION ([0-9]+\.[0-9]+\.[0-9]+)') {
+            throw "Could not read RickSheets version"
+          }
+          "version=$($Matches[1])" >> $env:GITHUB_OUTPUT
+
+      - name: Build portable ZIP
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          Compress-Archive -Path "dist/windows/RickSheets" -DestinationPath "dist/windows/RickSheets-$version-Windows-x64.zip"
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            throw "Inno Setup compiler not found"
+          }
+          & $iscc "/DAppVersion=$version" "/DAppFiles=$pwd\dist\windows\RickSheets" "/DOutputDirectory=$pwd\dist\windows" "packaging\windows\RickSheets.iss"
+
+      - name: Upload Windows packages
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: RickSheets-${{ steps.version.outputs.version }}-Windows-x64
+          path: |
+            dist/windows/RickSheets-${{ steps.version.outputs.version }}-Windows-x64.zip
+            dist/windows/RickSheets-${{ steps.version.outputs.version }}-Setup-x64.exe
+          if-no-files-found: error

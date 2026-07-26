@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow {
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    bool openDocument(const QString &fileName);
 
 protected:
     void closeEvent(QCloseEvent *event) override;

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(RickSheets VERSION 0.3.2 LANGUAGES CXX)
+project(RickSheets VERSION 0.3.3 LANGUAGES CXX)
 
 include(GNUInstallDirs)
 
@@ -40,7 +40,11 @@ add_executable(ricksheets
     src/previewwidget.cpp
     src/previewwidget.h
 )
+if(WIN32)
+    target_sources(ricksheets PRIVATE packaging/windows/ricksheets.rc)
+endif()
 target_link_libraries(ricksheets PRIVATE ricksheets_core Qt6::Widgets)
+set_target_properties(ricksheets PROPERTIES WIN32_EXECUTABLE TRUE)
 target_compile_definitions(ricksheets PRIVATE
     RICKSHEETS_VERSION="${PROJECT_VERSION}")
 

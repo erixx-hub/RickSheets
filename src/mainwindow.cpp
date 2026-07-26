@@ -172,6 +172,11 @@ MainWindow::MainWindow(QWidget *parent)
         setWindowState(windowState() | Qt::WindowMaximized);
 }
 
+bool MainWindow::openDocument(const QString &fileName)
+{
+    return openSongFile(fileName);
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     if (!maybeSave()) {
@@ -651,8 +656,12 @@ void MainWindow::importPdf()
     if (fileName.isEmpty())
         return;
 
+    QString pdfToText = QStandardPaths::findExecutable(
+        "pdftotext", {QCoreApplication::applicationDirPath()});
+    if (pdfToText.isEmpty())
+        pdfToText = QStandardPaths::findExecutable("pdftotext");
     QProcess process;
-    process.start("pdftotext", {"-raw", fileName, "-"});
+    process.start(pdfToText, {"-raw", fileName, "-"});
     if (!process.waitForStarted(3000)) {
         QMessageBox::critical(
             this, tr("PDF-Import nicht verfügbar"),
