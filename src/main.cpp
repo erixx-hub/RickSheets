@@ -253,10 +253,15 @@ int main(int argc, char *argv[])
     application.setStyle(QStyleFactory::create("Fusion"));
     application.setStyleSheet(rickSheetsStyleSheet());
     applyRickSheetsLanguage(application);
+    const QString testPreference =
+        qEnvironmentVariable("RICKSHEETS_TEST_THEME_PREFERENCE").toLower();
     const QString themePreference =
-        testTheme == "dark" || testTheme == "light"
-            ? "system"
-            : QSettings().value("appearance/theme", "system").toString();
+        testPreference == "system" || testPreference == "dark" ||
+                testPreference == "light"
+            ? testPreference
+            : testTheme == "dark" || testTheme == "light"
+                  ? "system"
+                  : QSettings().value("appearance/theme", "system").toString();
     applyRickSheetsTheme(application, themePreference);
 
     QFont font("DejaVu Sans");
