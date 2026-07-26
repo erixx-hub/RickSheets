@@ -31,7 +31,7 @@ jobs:
 
       - name: Configure
         shell: pwsh
-        run: cmake -S . -B build-windows -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX="$pwd/dist/windows/RickSheets" -DCMAKE_INSTALL_BINDIR=.
+        run: cmake -S . -B build-windows -G "Visual Studio 17 2022" -A x64 -DCMAKE_INSTALL_PREFIX="$pwd/dist/windows/RickSheets"
 
       - name: Build and test
         shell: pwsh
@@ -45,7 +45,9 @@ jobs:
 
       - name: Install application
         shell: pwsh
-        run: cmake --install build-windows --config Release
+        run: |
+          cmake --install build-windows --config Release
+          Move-Item "dist/windows/RickSheets/bin/ricksheets.exe" "dist/windows/RickSheets/ricksheets.exe"
 
       - name: Deploy Qt runtime
         shell: pwsh
