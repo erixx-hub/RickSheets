@@ -57,5 +57,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/erixx-hub/RickSheets.git
-        tag: v0.3.2
-        commit: 8f7179a26481fa14ec5b1c3b6f9825c60b54fe18
+        tag: v0.3.3
+        commit: 8b1d34bd7302779f5de3070c545cbe6608620b05
+      - type: patch
+        path: 0.3.3-metadata.patch

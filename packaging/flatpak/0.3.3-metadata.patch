@@ -1,0 +1,14 @@
+diff --git a/packaging/linux/io.github.erixx_hub.RickSheets.metainfo.xml b/packaging/linux/io.github.erixx_hub.RickSheets.metainfo.xml
+index 2fa7564..16329c4 100644
+--- a/packaging/linux/io.github.erixx_hub.RickSheets.metainfo.xml
++++ b/packaging/linux/io.github.erixx_hub.RickSheets.metainfo.xml
+@@ -64,6 +64,11 @@
+   <releases>
++    <release version="0.3.3" date="2026-07-26">
++      <description>
++        <p>Added reproducible Windows portable and installer packages with bundled PDF import tools.</p>
++      </description>
++    </release>
+     <release version="0.3.2" date="2026-07-26">
+       <description>
+         <p>Added AppStream metadata, a sandboxed Flatpak build and consistent Linux desktop integration.</p>
