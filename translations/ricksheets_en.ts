@@ -220,123 +220,125 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../src/mainwindow.cpp" line="253"/>
-        <location filename="../src/mainwindow.cpp" line="1069"/>
+        <location filename="../src/mainwindow.cpp" line="259"/>
+        <location filename="../src/mainwindow.cpp" line="602"/>
+        <location filename="../src/mainwindow.cpp" line="1182"/>
         <source>RickSheets</source>
         <translation>RickSheets</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="254"/>
+        <location filename="../src/mainwindow.cpp" line="260"/>
         <source>BIBLIOTHEK</source>
         <translation>LIBRARY</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="261"/>
+        <location filename="../src/mainwindow.cpp" line="268"/>
         <source>Suchen …</source>
         <translation>Search …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="266"/>
+        <location filename="../src/mainwindow.cpp" line="274"/>
         <source>Doppelklick oder Eingabetaste öffnet einen Song</source>
         <translation>Double-click or press Enter to open a song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="267"/>
+        <location filename="../src/mainwindow.cpp" line="278"/>
         <source>+ Neuer Song</source>
         <translation>+ New song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="269"/>
+        <location filename="../src/mainwindow.cpp" line="281"/>
         <source>Text importieren</source>
         <translation>Import text</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="270"/>
+        <location filename="../src/mainwindow.cpp" line="283"/>
         <source>PDF importieren</source>
         <translation>Import PDF</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="271"/>
+        <location filename="../src/mainwindow.cpp" line="285"/>
         <source>In Papierkorb</source>
         <translation>Move to Trash</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="311"/>
+        <location filename="../src/mainwindow.cpp" line="326"/>
         <source>SONG</source>
         <translation>SONG</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="314"/>
+        <location filename="../src/mainwindow.cpp" line="330"/>
         <source>Songdaten</source>
         <translation>Song details</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="325"/>
+        <location filename="../src/mainwindow.cpp" line="342"/>
+        <location filename="../src/mainwindow.cpp" line="603"/>
         <source>kein</source>
         <translation>none</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="326"/>
+        <location filename="../src/mainwindow.cpp" line="343"/>
         <source>Titel</source>
         <translation>Title</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="327"/>
+        <location filename="../src/mainwindow.cpp" line="344"/>
         <source>Interpret</source>
         <translation>Artist</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="328"/>
+        <location filename="../src/mainwindow.cpp" line="345"/>
         <source>Tonart</source>
         <translation>Key</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="329"/>
+        <location filename="../src/mainwindow.cpp" line="346"/>
         <source>BPM</source>
         <translation>BPM</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="330"/>
+        <location filename="../src/mainwindow.cpp" line="347"/>
         <source>Capo</source>
         <translation>Capo</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="337"/>
+        <location filename="../src/mainwindow.cpp" line="359"/>
         <source>ARRANGEMENT</source>
         <translation>ARRANGEMENT</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="340"/>
+        <location filename="../src/mainwindow.cpp" line="363"/>
         <source>Transponieren</source>
         <translation>Transpose</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="341"/>
+        <location filename="../src/mainwindow.cpp" line="365"/>
         <source>Tonart in Halbtonschritten ändern</source>
         <translation>Change key in semitone steps</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="342"/>
+        <location filename="../src/mainwindow.cpp" line="368"/>
         <source>Abschnitte</source>
         <translation>Sections</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="343"/>
+        <location filename="../src/mainwindow.cpp" line="370"/>
         <source>Abschnitte visuell bearbeiten und sortieren</source>
         <translation>Edit and sort sections visually</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="345"/>
+        <location filename="../src/mainwindow.cpp" line="374"/>
         <source>Akkorde</source>
         <translation>Chords</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="346"/>
+        <location filename="../src/mainwindow.cpp" line="376"/>
         <source>Akkorde visuell Wörtern zuordnen</source>
         <translation>Assign chords to words visually</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="361"/>
+        <location filename="../src/mainwindow.cpp" line="393"/>
         <source>[Intro]
 | A | D E | A |
 
@@ -349,154 +351,145 @@ You took my [Am]heart and turned me [F]on</source>
 You took my [Am]heart and turned me [F]on</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="384"/>
+        <location filename="../src/mainwindow.cpp" line="421"/>
         <source>A4-VORSCHAU</source>
         <translation>A4 PREVIEW</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="387"/>
-        <location filename="../src/mainwindow.cpp" line="1011"/>
+        <location filename="../src/mainwindow.cpp" line="425"/>
+        <location filename="../src/mainwindow.cpp" line="1124"/>
         <source>1 Seite</source>
         <translation>1 page</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="392"/>
-        <location filename="../src/mainwindow.cpp" line="949"/>
+        <location filename="../src/mainwindow.cpp" line="430"/>
+        <location filename="../src/mainwindow.cpp" line="1061"/>
         <source>PDF exportieren</source>
         <translation>Export PDF</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="430"/>
+        <location filename="../src/mainwindow.cpp" line="469"/>
+        <location filename="../src/mainwindow.cpp" line="606"/>
         <source>Bereit</source>
         <translation>Ready</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="435"/>
+        <location filename="../src/mainwindow.cpp" line="474"/>
         <source>&amp;Datei</source>
         <translation>&amp;File</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="436"/>
+        <location filename="../src/mainwindow.cpp" line="476"/>
         <source>&amp;Neuer Song</source>
         <translation>&amp;New song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="438"/>
+        <location filename="../src/mainwindow.cpp" line="479"/>
         <source>Text &amp;importieren …</source>
         <translation>&amp;Import text …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="439"/>
+        <location filename="../src/mainwindow.cpp" line="483"/>
         <source>&amp;PDF importieren …</source>
         <translation>Import &amp;PDF …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="440"/>
+        <location filename="../src/mainwindow.cpp" line="486"/>
         <source>&amp;Öffnen …</source>
         <translation>&amp;Open …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="441"/>
+        <location filename="../src/mainwindow.cpp" line="489"/>
         <source>&amp;Speichern</source>
         <translation>&amp;Save</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="442"/>
+        <location filename="../src/mainwindow.cpp" line="492"/>
         <source>Speichern &amp;unter …</source>
         <translation>Save &amp;as …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="444"/>
+        <location filename="../src/mainwindow.cpp" line="497"/>
         <source>PDF &amp;exportieren …</source>
         <translation>&amp;Export PDF …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="446"/>
+        <location filename="../src/mainwindow.cpp" line="502"/>
         <source>Beenden</source>
         <translation>Quit</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="448"/>
+        <location filename="../src/mainwindow.cpp" line="505"/>
         <source>&amp;Song</source>
         <translation>&amp;Song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="449"/>
+        <location filename="../src/mainwindow.cpp" line="508"/>
         <source>&amp;Transponieren …</source>
         <translation>&amp;Transpose …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="451"/>
+        <location filename="../src/mainwindow.cpp" line="512"/>
         <source>&amp;Ansicht</source>
         <translation>&amp;View</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="452"/>
+        <location filename="../src/mainwindow.cpp" line="514"/>
         <source>Darstellung</source>
         <translation>Appearance</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="465"/>
+        <location filename="../src/mainwindow.cpp" line="529"/>
         <source>System</source>
         <translation>System</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="466"/>
+        <location filename="../src/mainwindow.cpp" line="531"/>
         <source>Hell</source>
         <translation>Light</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="467"/>
+        <location filename="../src/mainwindow.cpp" line="532"/>
         <source>Dunkel</source>
         <translation>Dark</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="469"/>
+        <location filename="../src/mainwindow.cpp" line="535"/>
         <source>Sprache</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="481"/>
+        <location filename="../src/mainwindow.cpp" line="549"/>
         <source>Systemsprache</source>
         <translation>System language</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="483"/>
+        <location filename="../src/mainwindow.cpp" line="551"/>
         <source>Deutsch</source>
         <translation>German</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="484"/>
+        <location filename="../src/mainwindow.cpp" line="553"/>
         <source>Englisch</source>
         <translation>English</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="493"/>
-        <source>Sprache geändert</source>
-        <translation>Language changed</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="494"/>
-        <source>Die neue Sprache wird beim nächsten Start von RickSheets verwendet.</source>
-        <translation>The new language will be used the next time RickSheets starts.</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="553"/>
+        <location filename="../src/mainwindow.cpp" line="665"/>
         <source>Neuer Song</source>
         <translation>New song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="563"/>
+        <location filename="../src/mainwindow.cpp" line="675"/>
         <source>Chordsheet-Text importieren</source>
         <translation>Import chord-sheet text</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="566"/>
+        <location filename="../src/mainwindow.cpp" line="678"/>
         <source>Kopiere das Chordsheet möglichst vollständig in dieses Feld:</source>
         <translation>Paste the chord sheet as completely as possible into this field:</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="568"/>
+        <location filename="../src/mainwindow.cpp" line="680"/>
         <source>Titel – Interpret
 
 [Verse 1]
@@ -509,52 +502,52 @@ Text …</source>
 Lyrics …</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="570"/>
+        <location filename="../src/mainwindow.cpp" line="682"/>
         <source>Erkennen und übernehmen</source>
         <translation>Detect and apply</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="580"/>
+        <location filename="../src/mainwindow.cpp" line="692"/>
         <source>EINGEFÜGTER ORIGINALTEXT</source>
         <translation>PASTED ORIGINAL TEXT</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="592"/>
+        <location filename="../src/mainwindow.cpp" line="704"/>
         <source>Text importiert – bitte speichern und Erkennung prüfen</source>
         <translation>Text imported — review the detected result and save</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="593"/>
+        <location filename="../src/mainwindow.cpp" line="705"/>
         <source>Text importiert und als Bibliothekskopie gespeichert – bitte Erkennung prüfen</source>
         <translation>Text imported and saved as a library copy — review the detected result</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="600"/>
+        <location filename="../src/mainwindow.cpp" line="712"/>
         <source>Chordsheet-PDF importieren</source>
         <translation>Import chord-sheet PDF</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="600"/>
+        <location filename="../src/mainwindow.cpp" line="712"/>
         <source>PDF-Dateien (*.pdf)</source>
         <translation>PDF files (*.pdf)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="608"/>
+        <location filename="../src/mainwindow.cpp" line="720"/>
         <source>PDF-Import nicht verfügbar</source>
         <translation>PDF import unavailable</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="609"/>
+        <location filename="../src/mainwindow.cpp" line="721"/>
         <source>Das Hilfsprogramm „pdftotext“ wurde nicht gefunden. Im späteren AppImage/Windows-Paket wird es mitgeliefert.</source>
         <translation>The “pdftotext” utility was not found. It will be bundled with the AppImage and Windows packages.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="615"/>
+        <location filename="../src/mainwindow.cpp" line="727"/>
         <source>PDF-Import fehlgeschlagen</source>
         <translation>PDF import failed</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="616"/>
+        <location filename="../src/mainwindow.cpp" line="728"/>
         <source>Der Text konnte nicht aus dem PDF gelesen werden.
 
 %1</source>
@@ -563,180 +556,180 @@ Lyrics …</translation>
 %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="623"/>
+        <location filename="../src/mainwindow.cpp" line="735"/>
         <source>Kein Text gefunden</source>
         <translation>No text found</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="624"/>
+        <location filename="../src/mainwindow.cpp" line="736"/>
         <source>Dieses PDF enthält vermutlich nur eingescannte Bilder. OCR ist noch nicht eingebaut.</source>
         <translation>This PDF probably contains scanned images only. OCR is not implemented yet.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="630"/>
+        <location filename="../src/mainwindow.cpp" line="742"/>
         <source>QUELLE AUS PDF: %1</source>
         <translation>SOURCE PDF: %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="644"/>
+        <location filename="../src/mainwindow.cpp" line="756"/>
         <source>Geprüfter PDF-Import übernommen – bitte speichern</source>
         <translation>Reviewed PDF import applied — please save</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="645"/>
+        <location filename="../src/mainwindow.cpp" line="757"/>
         <source>Geprüfter PDF-Import als Bibliothekskopie gespeichert</source>
         <translation>Reviewed PDF import saved as a library copy</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="653"/>
+        <location filename="../src/mainwindow.cpp" line="765"/>
         <source>RickSheets-Song öffnen</source>
         <translation>Open RickSheets song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="654"/>
+        <location filename="../src/mainwindow.cpp" line="766"/>
         <source>RickSheets-Songs (*.ricksheet *.json)</source>
         <translation>RickSheets songs (*.ricksheet *.json)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="664"/>
+        <location filename="../src/mainwindow.cpp" line="776"/>
         <source>Öffnen fehlgeschlagen</source>
         <translation>Open failed</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="670"/>
+        <location filename="../src/mainwindow.cpp" line="782"/>
         <source>Ungültige Datei</source>
         <translation>Invalid file</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="700"/>
+        <location filename="../src/mainwindow.cpp" line="812"/>
         <source>Song geöffnet</source>
         <translation>Song opened</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="701"/>
+        <location filename="../src/mainwindow.cpp" line="813"/>
         <source>Song als Bibliothekskopie importiert</source>
         <translation>Song imported as a library copy</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="723"/>
+        <location filename="../src/mainwindow.cpp" line="835"/>
         <source>RickSheets-Song speichern</source>
         <translation>Save RickSheets song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="725"/>
+        <location filename="../src/mainwindow.cpp" line="837"/>
         <source>RickSheets-Songs (*.ricksheet)</source>
         <translation>RickSheets songs (*.ricksheet)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="734"/>
-        <location filename="../src/mainwindow.cpp" line="738"/>
+        <location filename="../src/mainwindow.cpp" line="846"/>
+        <location filename="../src/mainwindow.cpp" line="850"/>
         <source>Speichern fehlgeschlagen</source>
         <translation>Save failed</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="744"/>
+        <location filename="../src/mainwindow.cpp" line="856"/>
         <source>Gespeichert</source>
         <translation>Saved</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="792"/>
+        <location filename="../src/mainwindow.cpp" line="904"/>
         <source>Importierter Song</source>
         <translation>Imported song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="807"/>
+        <location filename="../src/mainwindow.cpp" line="919"/>
         <source>Bibliothekskopie konnte nicht angelegt werden: %1</source>
         <translation>Could not create library copy: %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="866"/>
+        <location filename="../src/mainwindow.cpp" line="978"/>
         <source>Noch keine Songs</source>
         <translation>No songs yet</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="867"/>
+        <location filename="../src/mainwindow.cpp" line="979"/>
         <source>Keine Treffer</source>
         <translation>No matches</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="901"/>
+        <location filename="../src/mainwindow.cpp" line="1013"/>
         <source>Soll „%1“ in den Papierkorb verschoben werden?</source>
         <translation>Move “%1” to the Trash?</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="903"/>
+        <location filename="../src/mainwindow.cpp" line="1015"/>
         <source>Soll „%1“ aus der Bibliothek entfernt werden?
 Die externe Datei bleibt erhalten.</source>
         <translation>Remove “%1” from the library?
 The external file will be kept.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="907"/>
+        <location filename="../src/mainwindow.cpp" line="1019"/>
         <source>Song aus Bibliothek entfernen</source>
         <translation>Remove song from library</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="916"/>
+        <location filename="../src/mainwindow.cpp" line="1028"/>
         <source>Löschen fehlgeschlagen</source>
         <translation>Delete failed</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="917"/>
+        <location filename="../src/mainwindow.cpp" line="1029"/>
         <source>Die Datei konnte nicht in den Papierkorb verschoben werden.</source>
         <translation>The file could not be moved to the Trash.</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="938"/>
+        <location filename="../src/mainwindow.cpp" line="1050"/>
         <source>Song in den Papierkorb verschoben</source>
         <translation>Song moved to the Trash</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="939"/>
+        <location filename="../src/mainwindow.cpp" line="1051"/>
         <source>Song aus der Bibliothek entfernt</source>
         <translation>Song removed from library</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="950"/>
+        <location filename="../src/mainwindow.cpp" line="1062"/>
         <source>PDF (*.pdf)</source>
         <translation>PDF (*.pdf)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="956"/>
+        <location filename="../src/mainwindow.cpp" line="1068"/>
         <source>PDF-Export fehlgeschlagen</source>
         <translation>PDF export failed</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="959"/>
+        <location filename="../src/mainwindow.cpp" line="1071"/>
         <source>PDF exportiert: %1</source>
         <translation>PDF exported: %1</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="966"/>
+        <location filename="../src/mainwindow.cpp" line="1078"/>
         <source>Song transponieren</source>
         <translation>Transpose song</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="967"/>
+        <location filename="../src/mainwindow.cpp" line="1079"/>
         <source>Halbtonschritte (negativ = abwärts):</source>
         <translation>Semitones (negative = down):</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="975"/>
+        <location filename="../src/mainwindow.cpp" line="1087"/>
         <source>Song um %1 Halbtonschritte transponiert</source>
         <translation>Song transposed by %1 semitones</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1011"/>
+        <location filename="../src/mainwindow.cpp" line="1124"/>
         <source>%1 Seiten</source>
         <translation>%1 pages</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1052"/>
+        <location filename="../src/mainwindow.cpp" line="1165"/>
         <source>Ungespeicherte Änderungen</source>
         <translation>Unsaved changes</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1053"/>
+        <location filename="../src/mainwindow.cpp" line="1166"/>
         <source>Möchtest du die Änderungen am aktuellen Song speichern?</source>
         <translation>Do you want to save the changes to the current song?</translation>
     </message>

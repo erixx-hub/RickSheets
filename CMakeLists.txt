@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(RickSheets VERSION 0.3.0 LANGUAGES CXX)
+project(RickSheets VERSION 0.3.1 LANGUAGES CXX)
 
 include(GNUInstallDirs)
 
@@ -45,6 +45,7 @@ target_compile_definitions(ricksheets PRIVATE
 qt_add_translations(ricksheets
     SOURCE_TARGETS ricksheets ricksheets_core
     TS_FILES translations/ricksheets_en.ts
+    LUPDATE_OPTIONS -no-obsolete
     RESOURCE_PREFIX "/i18n"
 )
 

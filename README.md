@@ -6,7 +6,7 @@ PDF files into clean, consistent and printable A4 chord sheets.
 The application focuses on one workflow: import an imperfect source, review
 the detected song, correct lyrics and chords, and export a dependable PDF.
 
-> RickSheets 0.3.0 is an early release. The interface is available in German
+> RickSheets 0.3.1 is an early release. The interface is available in German
 > and English.
 
 ## Features
@@ -25,7 +25,7 @@ the detected song, correct lyrics and chords, and export a dependable PDF.
 - Search a local song library.
 - Export PDF files using the same rendering engine as the preview.
 - Use light, dark or system appearance.
-- Follow the system language or select German or English explicitly.
+- Follow the system language or switch instantly between German and English.
 
 ## Current status
 

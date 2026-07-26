@@ -58,6 +58,12 @@ namespace {
 constexpr int TitleRole = Qt::UserRole + 1;
 constexpr int ArtistRole = Qt::UserRole + 2;
 
+void markForTranslation(QObject *object, const char *source,
+                        const char *property = "i18nText")
+{
+    object->setProperty(property, QByteArray(source));
+}
+
 class LibraryItemDelegate final : public QStyledItemDelegate {
 public:
     using QStyledItemDelegate::QStyledItemDelegate;
@@ -253,22 +259,31 @@ void MainWindow::buildUi()
     m_brand->setAccessibleName(tr("RickSheets"));
     auto *libraryLabel = new QLabel(tr("BIBLIOTHEK"));
     libraryLabel->setObjectName("sectionHeading");
+    markForTranslation(libraryLabel, "BIBLIOTHEK");
     QFont labelFont = libraryLabel->font();
     labelFont.setBold(true);
     libraryLabel->setFont(labelFont);
     m_librarySearch = new QLineEdit;
     m_librarySearch->setObjectName("librarySearch");
     m_librarySearch->setPlaceholderText(tr("Suchen …"));
+    markForTranslation(m_librarySearch, "Suchen …", "i18nPlaceholder");
     m_library = new QListWidget;
     m_library->setObjectName("songLibrary");
     m_library->setAlternatingRowColors(true);
     m_library->setItemDelegate(new LibraryItemDelegate(m_library));
     m_library->setToolTip(tr("Doppelklick oder Eingabetaste öffnet einen Song"));
+    markForTranslation(
+        m_library, "Doppelklick oder Eingabetaste öffnet einen Song",
+        "i18nTooltip");
     auto *newButton = new QPushButton(tr("+ Neuer Song"));
+    markForTranslation(newButton, "+ Neuer Song");
     newButton->setProperty("primary", true);
     auto *importButton = new QPushButton(tr("Text importieren"));
+    markForTranslation(importButton, "Text importieren");
     auto *pdfImportButton = new QPushButton(tr("PDF importieren"));
+    markForTranslation(pdfImportButton, "PDF importieren");
     m_deleteLibraryButton = new QPushButton(tr("In Papierkorb"));
+    markForTranslation(m_deleteLibraryButton, "In Papierkorb");
     m_deleteLibraryButton->setObjectName("deleteLibrarySong");
     m_deleteLibraryButton->setProperty("quiet", true);
     m_deleteLibraryButton->setEnabled(false);
@@ -310,8 +325,10 @@ void MainWindow::buildUi()
 
     auto *songHeading = new QLabel(tr("SONG"));
     songHeading->setObjectName("sectionHeading");
+    markForTranslation(songHeading, "SONG");
     songHeading->setFont(labelFont);
     auto *formBox = new QGroupBox(tr("Songdaten"));
+    markForTranslation(formBox, "Songdaten");
     auto *form = new QFormLayout(formBox);
     m_titleEdit = new QLineEdit;
     m_artistEdit = new QLineEdit;
@@ -328,6 +345,11 @@ void MainWindow::buildUi()
     form->addRow(tr("Tonart"), m_keyEdit);
     form->addRow(tr("BPM"), m_bpmEdit);
     form->addRow(tr("Capo"), m_capoEdit);
+    markForTranslation(form->labelForField(m_titleEdit), "Titel");
+    markForTranslation(form->labelForField(m_artistEdit), "Interpret");
+    markForTranslation(form->labelForField(m_keyEdit), "Tonart");
+    markForTranslation(form->labelForField(m_bpmEdit), "BPM");
+    markForTranslation(form->labelForField(m_capoEdit), "Capo");
 
     auto *editorToolbar = new QFrame;
     editorToolbar->setObjectName("editorToolbar");
@@ -336,14 +358,24 @@ void MainWindow::buildUi()
     editorHeader->setSpacing(6);
     auto *contentLabel = new QLabel(tr("ARRANGEMENT"));
     contentLabel->setObjectName("sectionHeading");
+    markForTranslation(contentLabel, "ARRANGEMENT");
     contentLabel->setFont(labelFont);
     auto *transposeButton = new QPushButton(tr("Transponieren"));
+    markForTranslation(transposeButton, "Transponieren");
     transposeButton->setToolTip(tr("Tonart in Halbtonschritten ändern"));
+    markForTranslation(transposeButton, "Tonart in Halbtonschritten ändern",
+                       "i18nTooltip");
     auto *blocksButton = new QPushButton(tr("Abschnitte"));
+    markForTranslation(blocksButton, "Abschnitte");
     blocksButton->setToolTip(tr("Abschnitte visuell bearbeiten und sortieren"));
+    markForTranslation(blocksButton, "Abschnitte visuell bearbeiten und sortieren",
+                       "i18nTooltip");
     blocksButton->setObjectName("editBlocks");
     auto *chordsButton = new QPushButton(tr("Akkorde"));
+    markForTranslation(chordsButton, "Akkorde");
     chordsButton->setToolTip(tr("Akkorde visuell Wörtern zuordnen"));
+    markForTranslation(chordsButton, "Akkorde visuell Wörtern zuordnen",
+                       "i18nTooltip");
     chordsButton->setObjectName("editChords");
     connect(transposeButton, &QPushButton::clicked, this, &MainWindow::transposeSong);
     connect(blocksButton, &QPushButton::clicked, this, &MainWindow::editBlocks);
@@ -360,6 +392,11 @@ void MainWindow::buildUi()
     m_contentEdit->setPlaceholderText(
         tr("[Intro]\n| A | D E | A |\n\n[Verse 1]\n"
            "You took my [Am]heart and turned me [F]on"));
+    markForTranslation(
+        m_contentEdit,
+        "[Intro]\n| A | D E | A |\n\n[Verse 1]\n"
+        "You took my [Am]heart and turned me [F]on",
+        "i18nPlaceholder");
     QFont mono("DejaVu Sans Mono");
     mono.setStyleHint(QFont::Monospace);
     mono.setPointSize(10);
@@ -383,6 +420,7 @@ void MainWindow::buildUi()
     previewHeader->setContentsMargins(10, 6, 7, 6);
     auto *previewLabel = new QLabel(tr("A4-VORSCHAU"));
     previewLabel->setObjectName("sectionHeading");
+    markForTranslation(previewLabel, "A4-VORSCHAU");
     previewLabel->setFont(labelFont);
     m_pageStatus = new QLabel(tr("1 Seite"));
     m_pageStatus->setObjectName("pageStatus");
@@ -390,6 +428,7 @@ void MainWindow::buildUi()
         "background:#c9e6c4; color:#171717; padding:4px 8px; "
         "border:1px solid #8fbd88; border-radius:4px; font-weight:700;");
     auto *pdfButton = new QPushButton(tr("PDF exportieren"));
+    markForTranslation(pdfButton, "PDF exportieren");
     pdfButton->setObjectName("primaryButton");
     connect(pdfButton, &QPushButton::clicked, this, &MainWindow::exportPdf);
     previewHeader->addWidget(previewLabel);
@@ -433,55 +472,86 @@ void MainWindow::buildUi()
 void MainWindow::buildMenus()
 {
     auto *fileMenu = menuBar()->addMenu(tr("&Datei"));
+    markForTranslation(fileMenu->menuAction(), "&Datei");
     auto *newAction = fileMenu->addAction(tr("&Neuer Song"), QKeySequence::New, this, &MainWindow::newSong);
-    Q_UNUSED(newAction);
-    fileMenu->addAction(tr("Text &importieren …"), QKeySequence("Ctrl+I"), this, &MainWindow::importText);
-    fileMenu->addAction(tr("&PDF importieren …"), this, &MainWindow::importPdf);
-    fileMenu->addAction(tr("&Öffnen …"), QKeySequence::Open, this, &MainWindow::openSong);
-    fileMenu->addAction(tr("&Speichern"), QKeySequence::Save, this, &MainWindow::saveSong);
-    fileMenu->addAction(tr("Speichern &unter …"), QKeySequence::SaveAs, this, &MainWindow::saveSongAs);
+    markForTranslation(newAction, "&Neuer Song");
+    auto *importTextAction = fileMenu->addAction(
+        tr("Text &importieren …"), QKeySequence("Ctrl+I"), this,
+        &MainWindow::importText);
+    markForTranslation(importTextAction, "Text &importieren …");
+    auto *importPdfAction = fileMenu->addAction(
+        tr("&PDF importieren …"), this, &MainWindow::importPdf);
+    markForTranslation(importPdfAction, "&PDF importieren …");
+    auto *openAction = fileMenu->addAction(
+        tr("&Öffnen …"), QKeySequence::Open, this, &MainWindow::openSong);
+    markForTranslation(openAction, "&Öffnen …");
+    auto *saveAction = fileMenu->addAction(
+        tr("&Speichern"), QKeySequence::Save, this, &MainWindow::saveSong);
+    markForTranslation(saveAction, "&Speichern");
+    auto *saveAsAction = fileMenu->addAction(
+        tr("Speichern &unter …"), QKeySequence::SaveAs, this,
+        &MainWindow::saveSongAs);
+    markForTranslation(saveAsAction, "Speichern &unter …");
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("PDF &exportieren …"), QKeySequence("Ctrl+E"), this, &MainWindow::exportPdf);
+    auto *exportAction = fileMenu->addAction(
+        tr("PDF &exportieren …"), QKeySequence("Ctrl+E"), this,
+        &MainWindow::exportPdf);
+    markForTranslation(exportAction, "PDF &exportieren …");
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("Beenden"), QKeySequence::Quit, this, &QWidget::close);
+    auto *quitAction = fileMenu->addAction(
+        tr("Beenden"), QKeySequence::Quit, this, &QWidget::close);
+    markForTranslation(quitAction, "Beenden");
 
     auto *songMenu = menuBar()->addMenu(tr("&Song"));
-    songMenu->addAction(tr("&Transponieren …"), QKeySequence("Ctrl+Shift+T"), this, &MainWindow::transposeSong);
+    markForTranslation(songMenu->menuAction(), "&Song");
+    auto *transposeAction = songMenu->addAction(
+        tr("&Transponieren …"), QKeySequence("Ctrl+Shift+T"), this,
+        &MainWindow::transposeSong);
+    markForTranslation(transposeAction, "&Transponieren …");
 
     auto *viewMenu = menuBar()->addMenu(tr("&Ansicht"));
+    markForTranslation(viewMenu->menuAction(), "&Ansicht");
     auto *themeMenu = viewMenu->addMenu(tr("Darstellung"));
+    markForTranslation(themeMenu->menuAction(), "Darstellung");
     auto *themeGroup = new QActionGroup(this);
     themeGroup->setExclusive(true);
     const QString selectedTheme =
         QSettings().value("appearance/theme", "system").toString();
-    auto addThemeAction = [&](const QString &label, const QString &value,
-                              auto slot) {
+    auto addThemeAction = [&](const QString &label, const char *source,
+                              const QString &value, auto slot) {
         QAction *action = themeMenu->addAction(label);
+        markForTranslation(action, source);
         action->setCheckable(true);
         action->setChecked(selectedTheme == value);
         themeGroup->addAction(action);
         connect(action, &QAction::triggered, this, slot);
     };
-    addThemeAction(tr("System"), "system", &MainWindow::setSystemTheme);
-    addThemeAction(tr("Hell"), "light", &MainWindow::setLightTheme);
-    addThemeAction(tr("Dunkel"), "dark", &MainWindow::setDarkTheme);
+    addThemeAction(tr("System"), "System", "system",
+                   &MainWindow::setSystemTheme);
+    addThemeAction(tr("Hell"), "Hell", "light", &MainWindow::setLightTheme);
+    addThemeAction(tr("Dunkel"), "Dunkel", "dark",
+                   &MainWindow::setDarkTheme);
 
     auto *languageMenu = viewMenu->addMenu(tr("Sprache"));
+    markForTranslation(languageMenu->menuAction(), "Sprache");
     auto *languageGroup = new QActionGroup(this);
     languageGroup->setExclusive(true);
     const QString selectedLanguage = rickSheetsLanguagePreference();
-    auto addLanguageAction = [&](const QString &label, const QString &value,
-                                 auto slot) {
+    auto addLanguageAction = [&](const QString &label, const char *source,
+                                 const QString &value, auto slot) {
         QAction *action = languageMenu->addAction(label);
+        markForTranslation(action, source);
         action->setCheckable(true);
         action->setChecked(selectedLanguage == value);
         languageGroup->addAction(action);
         connect(action, &QAction::triggered, this, slot);
     };
-    addLanguageAction(tr("Systemsprache"), "system",
+    addLanguageAction(tr("Systemsprache"), "Systemsprache", "system",
                       &MainWindow::setSystemLanguage);
-    addLanguageAction(tr("Deutsch"), "de", &MainWindow::setGermanLanguage);
-    addLanguageAction(tr("Englisch"), "en", &MainWindow::setEnglishLanguage);
+    addLanguageAction(tr("Deutsch"), "Deutsch", "de",
+                      &MainWindow::setGermanLanguage);
+    addLanguageAction(tr("Englisch"), "Englisch", "en",
+                      &MainWindow::setEnglishLanguage);
 }
 
 void MainWindow::chooseLanguage(const QString &language)
@@ -489,9 +559,51 @@ void MainWindow::chooseLanguage(const QString &language)
     if (rickSheetsLanguagePreference() == language)
         return;
     storeRickSheetsLanguagePreference(language);
-    QMessageBox::information(
-        this, tr("Sprache geändert"),
-        tr("Die neue Sprache wird beim nächsten Start von RickSheets verwendet."));
+    if (!applyRickSheetsLanguage(*qApp, language))
+        return;
+    retranslateUi();
+}
+
+void MainWindow::retranslateUi()
+{
+    const auto objects = findChildren<QObject *>();
+    for (QObject *object : objects) {
+        const QByteArray source = object->property("i18nText").toByteArray();
+        if (!source.isEmpty()) {
+            const QString translated = tr(source.constData());
+            if (auto *action = qobject_cast<QAction *>(object))
+                action->setText(translated);
+            else if (auto *button = qobject_cast<QPushButton *>(object))
+                button->setText(translated);
+            else if (auto *label = qobject_cast<QLabel *>(object))
+                label->setText(translated);
+            else if (auto *group = qobject_cast<QGroupBox *>(object))
+                group->setTitle(translated);
+        }
+
+        const QByteArray tooltip =
+            object->property("i18nTooltip").toByteArray();
+        if (!tooltip.isEmpty()) {
+            if (auto *widget = qobject_cast<QWidget *>(object))
+                widget->setToolTip(tr(tooltip.constData()));
+        }
+
+        const QByteArray placeholder =
+            object->property("i18nPlaceholder").toByteArray();
+        if (!placeholder.isEmpty()) {
+            const QString translated = tr(placeholder.constData());
+            if (auto *lineEdit = qobject_cast<QLineEdit *>(object))
+                lineEdit->setPlaceholderText(translated);
+            else if (auto *plainText = qobject_cast<QPlainTextEdit *>(object))
+                plainText->setPlaceholderText(translated);
+        }
+    }
+
+    m_brand->setAccessibleName(tr("RickSheets"));
+    m_capoEdit->setSpecialValueText(tr("kein"));
+    updatePageStatus(m_pageCount);
+    refreshLibrary(m_librarySearch->text());
+    statusBar()->showMessage(tr("Bereit"));
 }
 
 void MainWindow::setSystemLanguage()
@@ -1008,6 +1120,7 @@ void MainWindow::updatePreview()
 
 void MainWindow::updatePageStatus(int pages)
 {
+    m_pageCount = pages;
     m_pageStatus->setText(pages == 1 ? tr("1 Seite") : tr("%1 Seiten").arg(pages));
     m_pageStatus->setStyleSheet(
         pages == 1

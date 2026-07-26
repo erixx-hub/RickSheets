@@ -63,14 +63,8 @@ void UiTest::init()
 
 void UiTest::translatesCompleteInterfaceToEnglish()
 {
-    QVERIFY(applyRickSheetsLanguage(*QCoreApplication::instance(), "en"));
-    QCOMPARE(QCoreApplication::translate("MainWindow", "BIBLIOTHEK"),
-             QString("LIBRARY"));
-    QCOMPARE(QCoreApplication::translate("MainWindow", "PDF exportieren"),
-             QString("Export PDF"));
-    QCOMPARE(QCoreApplication::translate(
-                 "QObject", "Kein eindeutiger Titel erkannt."),
-             QString("No unambiguous title detected."));
+    QVERIFY(applyRickSheetsLanguage(*QCoreApplication::instance(), "de"));
+    storeRickSheetsLanguagePreference("de");
 
     MainWindow window;
     const auto actions = window.findChildren<QAction *>();
@@ -80,12 +74,43 @@ void UiTest::translatesCompleteInterfaceToEnglish()
                                return action->text() == text;
                            });
     };
+    QVERIFY(hasAction("&Datei"));
+    QVERIFY(hasAction("&Ansicht"));
+    auto *arrangement =
+        window.findChild<QPlainTextEdit *>("arrangementEditor");
+    QVERIFY(arrangement);
+    const QString originalContent = "[Strophe]\nA\nEine deutsche Zeile";
+    arrangement->setPlainText(originalContent);
+
+    QVERIFY(QMetaObject::invokeMethod(&window, "setEnglishLanguage"));
+    QCOMPARE(rickSheetsLanguagePreference(), QString("en"));
+    QCOMPARE(arrangement->toPlainText(), originalContent);
+    QCOMPARE(QCoreApplication::translate("MainWindow", "BIBLIOTHEK"),
+             QString("LIBRARY"));
+    QCOMPARE(QCoreApplication::translate("MainWindow", "PDF exportieren"),
+             QString("Export PDF"));
+    QCOMPARE(QCoreApplication::translate(
+                 "QObject", "Kein eindeutiger Titel erkannt."),
+             QString("No unambiguous title detected."));
     QVERIFY(hasAction("&File"));
     QVERIFY(hasAction("&View"));
     QVERIFY(hasAction("Language"));
     QVERIFY(hasAction("System language"));
     QVERIFY(hasAction("German"));
     QVERIFY(hasAction("English"));
+    const QString switchScreenshot =
+        qEnvironmentVariable("RICKSHEETS_LANGUAGE_SWITCH_SCREENSHOT");
+    if (!switchScreenshot.isEmpty()) {
+        window.resize(1280, 760);
+        window.show();
+        QTest::qWait(30);
+        QImage image(window.size(), QImage::Format_ARGB32_Premultiplied);
+        image.fill(Qt::transparent);
+        QPainter painter(&image);
+        window.render(&painter);
+        painter.end();
+        QVERIFY(image.save(switchScreenshot));
+    }
 
     BlockEditorDialog blockDialog("[Verse]\nA\nA line");
     QCOMPARE(blockDialog.windowTitle(), QString("Edit sections"));
@@ -99,14 +124,14 @@ void UiTest::translatesCompleteInterfaceToEnglish()
     QCOMPARE(importDialog.windowTitle(), QString("Review import"));
     QCOMPARE(importDialog.reviewedSong().content, detected.content);
 
-    storeRickSheetsLanguagePreference("en");
-    QCOMPARE(rickSheetsLanguagePreference(), QString("en"));
-    QCOMPARE(rickSheetsEffectiveLanguage(), QString("en"));
-    storeRickSheetsLanguagePreference("de");
+    QVERIFY(QMetaObject::invokeMethod(&window, "setGermanLanguage"));
+    QCOMPARE(rickSheetsLanguagePreference(), QString("de"));
+    QCOMPARE(arrangement->toPlainText(), originalContent);
+    QVERIFY(hasAction("&Datei"));
+    QVERIFY(hasAction("&Ansicht"));
     QCOMPARE(rickSheetsEffectiveLanguage(), QString("de"));
     storeRickSheetsLanguagePreference("system");
 
-    QVERIFY(applyRickSheetsLanguage(*QCoreApplication::instance(), "de"));
     QCOMPARE(QCoreApplication::translate("MainWindow", "BIBLIOTHEK"),
              QString("BIBLIOTHEK"));
 }

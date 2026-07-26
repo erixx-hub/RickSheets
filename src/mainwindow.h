@@ -64,6 +64,7 @@ private:
     QString libraryDirectory() const;
     void applyTheme(const QString &theme);
     void chooseLanguage(const QString &language);
+    void retranslateUi();
 
     QListWidget *m_library = nullptr;
     QLineEdit *m_librarySearch = nullptr;
@@ -78,6 +79,7 @@ private:
     PreviewWidget *m_preview = nullptr;
     QLabel *m_pageStatus = nullptr;
     QTimer *m_previewTimer = nullptr;
+    int m_pageCount = 1;
     QString m_currentFile;
     bool m_dirty = false;
 };

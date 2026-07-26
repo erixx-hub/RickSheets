@@ -6,12 +6,14 @@ library or performance-management features are not a current priority.
 
 ## Completed: German and English interface
 
-RickSheets 0.3.0 introduced:
+RickSheets 0.3.0 introduced the translation system, and 0.3.1 added immediate
+language switching without restarting:
 
 - Qt Linguist support in the CMake build;
 - a complete English translation catalogue;
 - automatic German/English selection based on the system language;
 - an explicit System, German or English preference;
+- immediate retranslation of the open main window;
 - automated UI coverage and visual checks in both languages;
 - strict separation between translated interface text and song content.
 
