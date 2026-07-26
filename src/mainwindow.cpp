@@ -7,6 +7,7 @@
 #include "chordeditordialog.h"
 #include "chordparser.h"
 #include "importreviewdialog.h"
+#include "language.h"
 #include "previewwidget.h"
 
 #include <QAction>
@@ -464,6 +465,48 @@ void MainWindow::buildMenus()
     addThemeAction(tr("System"), "system", &MainWindow::setSystemTheme);
     addThemeAction(tr("Hell"), "light", &MainWindow::setLightTheme);
     addThemeAction(tr("Dunkel"), "dark", &MainWindow::setDarkTheme);
+
+    auto *languageMenu = viewMenu->addMenu(tr("Sprache"));
+    auto *languageGroup = new QActionGroup(this);
+    languageGroup->setExclusive(true);
+    const QString selectedLanguage = rickSheetsLanguagePreference();
+    auto addLanguageAction = [&](const QString &label, const QString &value,
+                                 auto slot) {
+        QAction *action = languageMenu->addAction(label);
+        action->setCheckable(true);
+        action->setChecked(selectedLanguage == value);
+        languageGroup->addAction(action);
+        connect(action, &QAction::triggered, this, slot);
+    };
+    addLanguageAction(tr("Systemsprache"), "system",
+                      &MainWindow::setSystemLanguage);
+    addLanguageAction(tr("Deutsch"), "de", &MainWindow::setGermanLanguage);
+    addLanguageAction(tr("Englisch"), "en", &MainWindow::setEnglishLanguage);
+}
+
+void MainWindow::chooseLanguage(const QString &language)
+{
+    if (rickSheetsLanguagePreference() == language)
+        return;
+    storeRickSheetsLanguagePreference(language);
+    QMessageBox::information(
+        this, tr("Sprache geändert"),
+        tr("Die neue Sprache wird beim nächsten Start von RickSheets verwendet."));
+}
+
+void MainWindow::setSystemLanguage()
+{
+    chooseLanguage("system");
+}
+
+void MainWindow::setGermanLanguage()
+{
+    chooseLanguage("de");
+}
+
+void MainWindow::setEnglishLanguage()
+{
+    chooseLanguage("en");
 }
 
 void MainWindow::applyTheme(const QString &theme)

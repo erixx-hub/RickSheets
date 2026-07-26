@@ -4,18 +4,16 @@ This roadmap describes direction rather than fixed release dates. RickSheets
 remains focused on importing, correcting and printing chord sheets; unrelated
 library or performance-management features are not a current priority.
 
-## Next: internationalization
+## Completed: German and English interface
 
-Prepare the application for a German and English user interface:
+RickSheets 0.3.0 introduced:
 
-1. Add Qt Linguist support to the CMake build.
-2. Audit all visible strings and translation contexts.
-3. Keep German as the existing complete source-language experience.
-4. Add and review an English translation catalogue.
-5. Add a language preference with a system-language default.
-6. Test first-start, main-window and dialog flows in both languages.
-7. Ensure import terminology distinguishes language-dependent labels from
-   chord-sheet content, which must never be translated automatically.
+- Qt Linguist support in the CMake build;
+- a complete English translation catalogue;
+- automatic German/English selection based on the system language;
+- an explicit System, German or English preference;
+- automated UI coverage and visual checks in both languages;
+- strict separation between translated interface text and song content.
 
 The `.ricksheet` file format will remain language-neutral. Section names in a
 song belong to user content and will not change merely because the interface

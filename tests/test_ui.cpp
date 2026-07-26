@@ -7,10 +7,12 @@
 #include "chordparser.h"
 #include "chordeditordialog.h"
 #include "importreviewdialog.h"
+#include "language.h"
 #include "previewwidget.h"
 #include "song.h"
 
 #include <QDir>
+#include <QAction>
 #include <QFile>
 #include <QImage>
 #include <QLabel>
@@ -24,17 +26,90 @@
 #include <QTemporaryDir>
 #include <QtTest>
 
+#include <algorithm>
+
 class UiTest : public QObject {
     Q_OBJECT
 private slots:
+    void initTestCase();
+    void init();
     void createsAndRendersMainWindow();
     void restoresMaximizedWindowState();
+    void translatesCompleteInterfaceToEnglish();
     void reviewsImportedSongBeforeAcceptance();
     void rendersPdfPageInImportReview();
     void editsAndReordersSongBlocks();
     void assignsChordsToWordsVisually();
     void roundTripsAllImportedPdfSongs();
 };
+
+void UiTest::initTestCase()
+{
+    QCoreApplication::setOrganizationName("RickSheets");
+    QCoreApplication::setApplicationName("RickSheetsUiTests");
+    const QString settingsDirectory =
+        QDir::temp().filePath("ricksheets-ui-test-settings");
+    QVERIFY(QDir().mkpath(settingsDirectory));
+    QSettings::setPath(QSettings::NativeFormat, QSettings::UserScope,
+                       settingsDirectory);
+}
+
+void UiTest::init()
+{
+    const QString language =
+        qEnvironmentVariable("RICKSHEETS_TEST_LANGUAGE", "de");
+    QVERIFY(applyRickSheetsLanguage(*QCoreApplication::instance(), language));
+}
+
+void UiTest::translatesCompleteInterfaceToEnglish()
+{
+    QVERIFY(applyRickSheetsLanguage(*QCoreApplication::instance(), "en"));
+    QCOMPARE(QCoreApplication::translate("MainWindow", "BIBLIOTHEK"),
+             QString("LIBRARY"));
+    QCOMPARE(QCoreApplication::translate("MainWindow", "PDF exportieren"),
+             QString("Export PDF"));
+    QCOMPARE(QCoreApplication::translate(
+                 "QObject", "Kein eindeutiger Titel erkannt."),
+             QString("No unambiguous title detected."));
+
+    MainWindow window;
+    const auto actions = window.findChildren<QAction *>();
+    auto hasAction = [&](const QString &text) {
+        return std::any_of(actions.cbegin(), actions.cend(),
+                           [&](const QAction *action) {
+                               return action->text() == text;
+                           });
+    };
+    QVERIFY(hasAction("&File"));
+    QVERIFY(hasAction("&View"));
+    QVERIFY(hasAction("Language"));
+    QVERIFY(hasAction("System language"));
+    QVERIFY(hasAction("German"));
+    QVERIFY(hasAction("English"));
+
+    BlockEditorDialog blockDialog("[Verse]\nA\nA line");
+    QCOMPARE(blockDialog.windowTitle(), QString("Edit sections"));
+    ChordEditorDialog chordDialog("[Verse]\nA\nA line");
+    QCOMPARE(chordDialog.windowTitle(), QString("Edit chords visually"));
+
+    Song detected;
+    detected.title = "Test";
+    detected.content = "[Strophe]\nA\nEine Zeile";
+    ImportReviewDialog importDialog("Quelle", detected, "Original");
+    QCOMPARE(importDialog.windowTitle(), QString("Review import"));
+    QCOMPARE(importDialog.reviewedSong().content, detected.content);
+
+    storeRickSheetsLanguagePreference("en");
+    QCOMPARE(rickSheetsLanguagePreference(), QString("en"));
+    QCOMPARE(rickSheetsEffectiveLanguage(), QString("en"));
+    storeRickSheetsLanguagePreference("de");
+    QCOMPARE(rickSheetsEffectiveLanguage(), QString("de"));
+    storeRickSheetsLanguagePreference("system");
+
+    QVERIFY(applyRickSheetsLanguage(*QCoreApplication::instance(), "de"));
+    QCOMPARE(QCoreApplication::translate("MainWindow", "BIBLIOTHEK"),
+             QString("BIBLIOTHEK"));
+}
 
 void UiTest::restoresMaximizedWindowState()
 {

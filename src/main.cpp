@@ -3,6 +3,7 @@
 
 #include "mainwindow.h"
 #include "appstyle.h"
+#include "language.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -57,7 +58,8 @@ void integrateAppImage()
             "[Desktop Entry]\n"
             "Type=Application\n"
             "Name=RickSheets\n"
-            "Comment=Chordsheets importieren, bearbeiten und als PDF exportieren\n"
+            "Comment=Import, edit and export printable chord sheets\n"
+            "Comment[de]=Chordsheets importieren, bearbeiten und als PDF exportieren\n"
             "Exec=\"%1\" %F\n"
             "Icon=%2\n"
             "Terminal=false\n"
@@ -214,6 +216,7 @@ int main(int argc, char *argv[])
     application.setWindowIcon(QIcon(":/brand/de.rickrich.RickSheets.png"));
     application.setStyle(QStyleFactory::create("Fusion"));
     application.setStyleSheet(rickSheetsStyleSheet());
+    applyRickSheetsLanguage(application);
 
     QFont font("DejaVu Sans");
     font.setPointSize(10);

@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=RickSheets
-Comment=Chordsheets importieren, bearbeiten und als PDF exportieren
+Comment=Import, edit and export printable chord sheets
+Comment[de]=Chordsheets importieren, bearbeiten und als PDF exportieren
 Exec=ricksheets %F
 Icon=de.rickrich.RickSheets
 Terminal=false

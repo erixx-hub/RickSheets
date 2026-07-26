@@ -44,6 +44,9 @@ private slots:
     void setSystemTheme();
     void setLightTheme();
     void setDarkTheme();
+    void setSystemLanguage();
+    void setGermanLanguage();
+    void setEnglishLanguage();
     void deleteLibrarySong();
 
 private:
@@ -60,6 +63,7 @@ private:
     QString createLibraryCopy(const Song &song, const QString &sourceFile = {});
     QString libraryDirectory() const;
     void applyTheme(const QString &theme);
+    void chooseLanguage(const QString &language);
 
     QListWidget *m_library = nullptr;
     QLineEdit *m_librarySearch = nullptr;

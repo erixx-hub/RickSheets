@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(RickSheets VERSION 0.2.0 LANGUAGES CXX)
+project(RickSheets VERSION 0.3.0 LANGUAGES CXX)
 
 include(GNUInstallDirs)
 
@@ -7,7 +7,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Test)
+find_package(Qt6 6.5 REQUIRED COMPONENTS
+    Core Gui Widgets PrintSupport Test LinguistTools)
 
 add_library(ricksheets_core
     src/song.cpp
@@ -22,6 +23,8 @@ target_include_directories(ricksheets_core PUBLIC src)
 
 add_executable(ricksheets
     src/main.cpp
+    src/language.cpp
+    src/language.h
     src/appstyle.cpp
     src/appstyle.h
     src/blockeditordialog.cpp
@@ -38,6 +41,12 @@ add_executable(ricksheets
 target_link_libraries(ricksheets PRIVATE ricksheets_core Qt6::Widgets)
 target_compile_definitions(ricksheets PRIVATE
     RICKSHEETS_VERSION="${PROJECT_VERSION}")
+
+qt_add_translations(ricksheets
+    SOURCE_TARGETS ricksheets ricksheets_core
+    TS_FILES translations/ricksheets_en.ts
+    RESOURCE_PREFIX "/i18n"
+)
 
 set(RICKSHEETS_BRAND_ASSETS
     ${CMAKE_SOURCE_DIR}/docs/Logo/ricksheets-favicon.svg
@@ -73,6 +82,8 @@ set_tests_properties(core PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 
 add_executable(ricksheets_ui_test
     tests/test_ui.cpp
+    src/language.cpp
+    src/language.h
     src/appstyle.cpp
     src/appstyle.h
     src/blockeditordialog.cpp
