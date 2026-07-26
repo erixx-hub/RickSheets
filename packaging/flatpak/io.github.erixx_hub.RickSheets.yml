@@ -55,5 +55,7 @@ modules:
     config-opts:
       - -DCMAKE_BUILD_TYPE=Release
     sources:
-      - type: dir
-        path: ../..
+      - type: git
+        url: https://github.com/erixx-hub/RickSheets.git
+        tag: v0.3.2
+        commit: 8f7179a26481fa14ec5b1c3b6f9825c60b54fe18

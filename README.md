@@ -60,7 +60,7 @@ ctest --test-dir build --output-on-failure
 ## Building the Flatpak
 
 Install `flatpak`, `flatpak-builder` and the Flathub remote, then build and
-install the development manifest:
+install the release manifest:
 
 ```bash
 flatpak-builder --user --install-deps-from=flathub \
