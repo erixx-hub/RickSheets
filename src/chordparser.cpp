@@ -189,7 +189,9 @@ QString ChordParser::normalizePdfColumns(const QString &extractedText)
     for (const QString &page : pages) {
         const QStringList lines = page.split('\n');
         QMap<int, int> startHistogram;
+        int pageWidth = 0;
         for (const QString &line : lines) {
+            pageWidth = qMax(pageWidth, line.size());
             const int firstNonSpace = line.indexOf(QRegularExpression(R"(\S)"));
             if (firstNonSpace >= 35 && firstNonSpace <= 110)
                 ++startHistogram[firstNonSpace];
@@ -205,17 +207,45 @@ QString ChordParser::normalizePdfColumns(const QString &extractedText)
 
         int columnStart = -1;
         int bestCluster = 0;
+        const int searchStart = qMax(35, qRound(pageWidth * 0.44));
+        const int searchEnd = qMin(110, qRound(pageWidth * 0.58));
+        const auto findBestCluster = [&](int first, int last) {
+            for (auto it = startHistogram.cbegin(); it != startHistogram.cend();
+                 ++it) {
+                if (it.key() < first || it.key() > last)
+                    continue;
+                int cluster = 0;
+                for (int position = it.key() - 2; position <= it.key() + 2;
+                     ++position)
+                    cluster += startHistogram.value(position);
+                if (cluster > bestCluster) {
+                    bestCluster = cluster;
+                    columnStart = it.key();
+                }
+            }
+        };
+        findBestCluster(searchStart, searchEnd);
+        const bool useWideSearch = bestCluster < 3;
+        if (useWideSearch)
+            findBestCluster(35, 110);
+        // Chord rows often begin a few characters inside the right column and
+        // can outvote its true left edge. Prefer the earliest strong cluster
+        // near the page centre so that this indentation remains intact.
+        const int strongCluster = qMax(3, qCeil(bestCluster * 0.55));
         for (auto it = startHistogram.cbegin(); it != startHistogram.cend(); ++it) {
+            if (it.key() < (useWideSearch ? 35 : searchStart) ||
+                it.key() > (useWideSearch ? 110 : searchEnd))
+                continue;
             int cluster = 0;
             for (int position = it.key() - 2; position <= it.key() + 2; ++position)
                 cluster += startHistogram.value(position);
-            if (cluster > bestCluster) {
-                bestCluster = cluster;
+            if (cluster >= strongCluster) {
                 columnStart = it.key();
+                break;
             }
         }
 
-        if (columnStart < 0 || bestCluster < 5) {
+        if (columnStart < 0 || bestCluster < 3) {
             orderedPages << page.trimmed();
             continue;
         }
@@ -242,8 +272,12 @@ QString ChordParser::normalizePdfColumns(const QString &extractedText)
             }
 
             if (split) {
-                left << line.left(columnStart).trimmed();
-                right << line.mid(columnStart).trimmed();
+                QString leftLine = line.left(columnStart);
+                leftLine.remove(QRegularExpression(R"(\s+$)"));
+                QString rightLine = line.mid(columnStart);
+                rightLine.remove(QRegularExpression(R"(\s+$)"));
+                left << leftLine;
+                right << rightLine;
                 ++actualSplits;
             } else {
                 left << line;
@@ -251,7 +285,7 @@ QString ChordParser::normalizePdfColumns(const QString &extractedText)
             }
         }
 
-        if (actualSplits < 5) {
+        if (actualSplits < 3) {
             orderedPages << page.trimmed();
             continue;
         }

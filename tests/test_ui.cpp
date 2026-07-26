@@ -22,6 +22,7 @@
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSettings>
+#include <QSlider>
 #include <QTabWidget>
 #include <QTemporaryDir>
 #include <QtTest>
@@ -155,7 +156,7 @@ void UiTest::restoresMaximizedWindowState()
 
     {
         MainWindow restoredWindow;
-        restoredWindow.show();
+        restoredWindow.showWithSavedWindowState();
         QTest::qWait(30);
         QVERIFY(restoredWindow.isMaximized());
         restoredWindow.showNormal();
@@ -223,11 +224,16 @@ void UiTest::createsAndRendersMainWindow()
     auto *search = window.findChild<QLineEdit *>("librarySearch");
     auto *arrangement = window.findChild<QPlainTextEdit *>("arrangementEditor");
     auto *deleteButton = window.findChild<QPushButton *>("deleteLibrarySong");
+    auto *layoutScale = window.findChild<QSlider *>("layoutScale");
+    auto *layoutScaleValue = window.findChild<QLabel *>("layoutScaleValue");
     QVERIFY(library);
     QVERIFY(search);
     QVERIFY(arrangement);
     QVERIFY(deleteButton);
+    QVERIFY(layoutScale);
+    QVERIFY(layoutScaleValue);
     QVERIFY(!deleteButton->isEnabled());
+    QCOMPARE(layoutScale->value(), 100);
     QCOMPARE(arrangement->lineWrapMode(), QPlainTextEdit::NoWrap);
     QCOMPARE(library->count(), 3);
     search->setText("Beta");
@@ -251,6 +257,8 @@ void UiTest::createsAndRendersMainWindow()
             .size(),
         3);
     QVERIFY(window.windowTitle().contains("External Gamma"));
+    layoutScale->setValue(145);
+    QCOMPARE(layoutScaleValue->text(), QString("145 %"));
 
     QVERIFY(QMetaObject::invokeMethod(&window, "setLightTheme"));
     QVERIFY(QApplication::palette().color(QPalette::Window).lightness() >= 128);

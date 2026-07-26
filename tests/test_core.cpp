@@ -25,9 +25,11 @@ private slots:
     void reportsConcreteImportWarnings();
     void importsPdfStyleHeaderWithHint();
     void restoresPdfColumnReadingOrder();
+    void preservesChordPositionsInPdfColumns();
     void normalizesIncompleteSectionBrackets();
     void transposesChords();
     void rendersPages();
+    void scalesShortSongs();
     void anchorsChordToExactLyricPosition();
     void usesColumnsForLongSongs();
     void rejectsColumnsThatWrapGridLines();
@@ -43,6 +45,7 @@ void CoreTest::jsonRoundTrip()
     original.artist = "Number Nine";
     original.key = "Am";
     original.bpm = 123;
+    original.layoutScale = 145;
     original.content = "[Verse 1]\nAm F C G";
     QString error;
     const Song restored = Song::fromJson(original.toJson(), &error);
@@ -50,6 +53,7 @@ void CoreTest::jsonRoundTrip()
     QCOMPARE(restored.title, original.title);
     QCOMPARE(restored.content, original.content);
     QCOMPARE(restored.bpm, 123);
+    QCOMPARE(restored.layoutScale, 145);
 }
 
 void CoreTest::detectsChordLines()
@@ -183,6 +187,27 @@ void CoreTest::restoresPdfColumnReadingOrder()
     QVERIFY(rightLyric > chorus);
 }
 
+void CoreTest::preservesChordPositionsInPdfColumns()
+{
+    const QString extracted =
+        "Just One Beer - Low Places                              G                              D\n"
+        "BPM: 186 - Capo 2!                                     Just one beer - another line\n"
+        "[Verse 1]                                              [Chorus]\n"
+        "           Hm                                                G                             D\n"
+        "I got no plans, I just needed some peace                Just one beer - I need some quiet\n"
+        "                  A                              Hm                   A\n"
+        "Found me a table, sittin' down with ease                Why is it so unclear\n";
+    const QString normalized = ChordParser::normalizePdfColumns(extracted);
+    const Song song = ChordParser::importText(normalized, "Just One Beer.pdf");
+    QVERIFY2(
+        song.content.contains(
+            QRegularExpression(R"(^\s*G\s{8,}D\s*$)",
+                               QRegularExpression::MultilineOption)),
+        qPrintable(song.content));
+    QVERIFY(song.content.indexOf("[Chorus]") >
+            song.content.indexOf("Found me a table"));
+}
+
 void CoreTest::normalizesIncompleteSectionBrackets()
 {
     const Song song = ChordParser::importText(
@@ -221,6 +246,21 @@ void CoreTest::rendersPages()
     SongRenderer::configureDocument(document, song);
     QCOMPARE(SongRenderer::pageCount(document), 1);
     QVERIFY(SongRenderer::toHtml(song).contains("Test"));
+}
+
+void CoreTest::scalesShortSongs()
+{
+    Song song;
+    song.title = "Short Song";
+    song.artist = "Test";
+    song.content = "[Verse]\nA\nA short line";
+    song.layoutScale = 150;
+    const QString enlarged = SongRenderer::toHtml(song);
+    song.layoutScale = 100;
+    const QString normal = SongRenderer::toHtml(song);
+    QVERIFY(enlarged.contains("font-size:14.0pt"));
+    QVERIFY(normal.contains("font-size:9.3pt"));
+    QVERIFY(enlarged != normal);
 }
 
 void CoreTest::anchorsChordToExactLyricPosition()

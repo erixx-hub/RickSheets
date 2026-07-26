@@ -16,6 +16,7 @@ QByteArray Song::toJson() const
         {"key", key},
         {"bpm", bpm},
         {"capo", capo},
+        {"layoutScale", layoutScale},
         {"content", content},
     };
     return QJsonDocument(object).toJson(QJsonDocument::Indented);
@@ -39,6 +40,7 @@ Song Song::fromJson(const QByteArray &data, QString *error)
     song.key = object.value("key").toString();
     song.bpm = object.value("bpm").toInt();
     song.capo = object.value("capo").toInt();
+    song.layoutScale = qBound(80, object.value("layoutScale").toInt(100), 160);
     song.content = object.value("content").toString();
     return song;
 }

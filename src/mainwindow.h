@@ -14,6 +14,7 @@ class QListWidgetItem;
 class QCloseEvent;
 class QPlainTextEdit;
 class QPushButton;
+class QSlider;
 class QSpinBox;
 class QTimer;
 class PreviewWidget;
@@ -23,6 +24,7 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     bool openDocument(const QString &fileName);
+    void showWithSavedWindowState();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -76,6 +78,8 @@ private:
     QLineEdit *m_keyEdit = nullptr;
     QSpinBox *m_bpmEdit = nullptr;
     QSpinBox *m_capoEdit = nullptr;
+    QSlider *m_layoutScale = nullptr;
+    QLabel *m_layoutScaleLabel = nullptr;
     QPlainTextEdit *m_contentEdit = nullptr;
     PreviewWidget *m_preview = nullptr;
     QLabel *m_pageStatus = nullptr;

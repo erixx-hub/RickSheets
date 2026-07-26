@@ -280,6 +280,6 @@ int main(int argc, char *argv[])
             window.openDocument(document.absoluteFilePath());
         }
     }
-    window.show();
+    window.showWithSavedWindowState();
     return application.exec();
 }

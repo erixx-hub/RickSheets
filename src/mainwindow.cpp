@@ -41,6 +41,7 @@
 #include <QPushButton>
 #include <QScrollArea>
 #include <QSettings>
+#include <QSlider>
 #include <QSpinBox>
 #include <QSplitter>
 #include <QStandardPaths>
@@ -168,13 +169,19 @@ MainWindow::MainWindow(QWidget *parent)
     const QByteArray geometry = settings.value("window/geometry").toByteArray();
     if (!geometry.isEmpty())
         restoreGeometry(geometry);
-    if (settings.value("window/maximized", false).toBool())
-        setWindowState(windowState() | Qt::WindowMaximized);
 }
 
 bool MainWindow::openDocument(const QString &fileName)
 {
     return openSongFile(fileName);
+}
+
+void MainWindow::showWithSavedWindowState()
+{
+    if (QSettings().value("window/maximized", false).toBool())
+        showMaximized();
+    else
+        show();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -186,7 +193,9 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     QSettings settings;
     settings.setValue("window/geometry", saveGeometry());
-    settings.setValue("window/maximized", isMaximized());
+    settings.setValue(
+        "window/maximized",
+        windowState().testFlag(Qt::WindowMaximized) || isMaximized());
     settings.sync();
     event->accept();
 }
@@ -263,7 +272,7 @@ void MainWindow::buildUi()
     libraryLayout->addWidget(m_librarySearch);
     libraryLayout->addWidget(m_library, 1);
     libraryLayout->addWidget(newButton);
-    auto *importActions = new QHBoxLayout;
+    auto *importActions = new QVBoxLayout;
     importActions->setSpacing(7);
     importActions->addWidget(importButton);
     importActions->addWidget(pdfImportButton);
@@ -383,12 +392,37 @@ void MainWindow::buildUi()
     m_pageStatus->setStyleSheet(
         "background:#c9e6c4; color:#171717; padding:4px 8px; "
         "border:1px solid #8fbd88; border-radius:4px; font-weight:700;");
+    auto *scaleTitle = new QLabel(tr("Größe"));
+    markForTranslation(scaleTitle, "Größe");
+    m_layoutScale = new QSlider(Qt::Horizontal);
+    m_layoutScale->setObjectName("layoutScale");
+    m_layoutScale->setRange(80, 160);
+    m_layoutScale->setSingleStep(5);
+    m_layoutScale->setPageStep(10);
+    m_layoutScale->setValue(100);
+    m_layoutScale->setFixedWidth(105);
+    m_layoutScale->setToolTip(
+        tr("Inhalt auf der Seite vergrößern oder verkleinern"));
+    markForTranslation(
+        m_layoutScale, "Inhalt auf der Seite vergrößern oder verkleinern",
+        "i18nTooltip");
+    m_layoutScaleLabel = new QLabel("100 %");
+    m_layoutScaleLabel->setObjectName("layoutScaleValue");
+    m_layoutScaleLabel->setMinimumWidth(42);
+    connect(m_layoutScale, &QSlider::valueChanged, this, [this](int value) {
+        m_layoutScaleLabel->setText(QString::number(value) + " %");
+        setDirty(true);
+        schedulePreview();
+    });
     auto *pdfButton = new QPushButton(tr("PDF exportieren"));
     markForTranslation(pdfButton, "PDF exportieren");
     pdfButton->setObjectName("primaryButton");
     connect(pdfButton, &QPushButton::clicked, this, &MainWindow::exportPdf);
     previewHeader->addWidget(previewLabel);
     previewHeader->addStretch();
+    previewHeader->addWidget(scaleTitle);
+    previewHeader->addWidget(m_layoutScale);
+    previewHeader->addWidget(m_layoutScaleLabel);
     previewHeader->addWidget(m_pageStatus);
     previewHeader->addWidget(pdfButton);
 
@@ -661,7 +695,7 @@ void MainWindow::importPdf()
     if (pdfToText.isEmpty())
         pdfToText = QStandardPaths::findExecutable("pdftotext");
     QProcess process;
-    process.start(pdfToText, {"-raw", fileName, "-"});
+    process.start(pdfToText, {"-layout", fileName, "-"});
     if (!process.waitForStarted(3000)) {
         QMessageBox::critical(
             this, tr("PDF-Import nicht verfügbar"),
@@ -676,7 +710,8 @@ void MainWindow::importPdf()
                 .arg(QString::fromUtf8(process.readAllStandardError())));
         return;
     }
-    const QString extracted = QString::fromUtf8(process.readAllStandardOutput());
+    const QString extracted = ChordParser::normalizePdfColumns(
+        QString::fromUtf8(process.readAllStandardOutput()));
     if (extracted.trimmed().isEmpty()) {
         QMessageBox::warning(
             this, tr("Kein Text gefunden"),
@@ -970,11 +1005,39 @@ void MainWindow::deleteLibrarySong()
 
     if (managed) {
         QString pathInTrash;
-        if (!QFile::moveToTrash(fileName, &pathInTrash)) {
-            QMessageBox::critical(
-                this, tr("Löschen fehlgeschlagen"),
-                tr("Die Datei konnte nicht in den Papierkorb verschoben werden."));
-            return;
+        bool movedToTrash = QFile::moveToTrash(fileName, &pathInTrash);
+        if (!movedToTrash) {
+            const QString gio = QStandardPaths::findExecutable("gio");
+            if (!gio.isEmpty()) {
+                QProcess trashProcess;
+                trashProcess.start(gio, {"trash", fileName});
+                movedToTrash =
+                    trashProcess.waitForStarted(3000) &&
+                    trashProcess.waitForFinished(10000) &&
+                    trashProcess.exitStatus() == QProcess::NormalExit &&
+                    trashProcess.exitCode() == 0 && !QFileInfo::exists(fileName);
+            }
+        }
+        if (!movedToTrash) {
+            QDir fallbackTrash(QDir(libraryDirectory()).filePath(".trash"));
+            if (!fallbackTrash.exists() && !QDir().mkpath(fallbackTrash.path())) {
+                QMessageBox::critical(
+                    this, tr("Löschen fehlgeschlagen"),
+                    tr("Die Datei konnte nicht in den Papierkorb verschoben werden."));
+                return;
+            }
+            QString fallbackPath = fallbackTrash.filePath(info.fileName());
+            for (int suffix = 2; QFileInfo::exists(fallbackPath); ++suffix) {
+                fallbackPath = fallbackTrash.filePath(
+                    info.completeBaseName() + " - " + QString::number(suffix) +
+                    "." + info.suffix());
+            }
+            if (!QFile::rename(fileName, fallbackPath)) {
+                QMessageBox::critical(
+                    this, tr("Löschen fehlgeschlagen"),
+                    tr("Die Datei konnte nicht in den Papierkorb verschoben werden."));
+                return;
+            }
         }
     }
 
@@ -1083,12 +1146,16 @@ void MainWindow::loadIntoEditor(const Song &song)
     const QSignalBlocker b4(m_bpmEdit);
     const QSignalBlocker b5(m_capoEdit);
     const QSignalBlocker b6(m_contentEdit);
+    const QSignalBlocker b7(m_layoutScale);
     m_titleEdit->setText(song.title);
     m_artistEdit->setText(song.artist);
     m_keyEdit->setText(song.key);
     m_bpmEdit->setValue(song.bpm);
     m_capoEdit->setValue(song.capo);
     m_contentEdit->setPlainText(song.content);
+    m_layoutScale->setValue(qBound(80, song.layoutScale, 160));
+    m_layoutScaleLabel->setText(
+        QString::number(m_layoutScale->value()) + " %");
     updatePreview();
 }
 
@@ -1100,6 +1167,7 @@ Song MainWindow::songFromEditor() const
     song.key = m_keyEdit->text().trimmed();
     song.bpm = m_bpmEdit->value();
     song.capo = m_capoEdit->value();
+    song.layoutScale = m_layoutScale->value();
     song.content = m_contentEdit->toPlainText();
     return song;
 }

@@ -12,6 +12,7 @@ struct Song {
     QString key;
     int bpm = 0;
     int capo = 0;
+    int layoutScale = 100;
     QString content;
 
     QByteArray toJson() const;

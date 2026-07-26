@@ -91,22 +91,43 @@ QList<SectionBlock> buildBlocks(const Song &song)
 }
 
 QString stylesheet(bool compact, qreal compactPointSize = 6.8,
-                   bool tightOneColumn = false)
+                   bool tightOneColumn = false, int layoutScale = 100)
 {
-    const QString bodySize = compact
-                                 ? QString::number(compactPointSize, 'f', 1) + "pt"
-                                 : (tightOneColumn ? "8.8pt" : "9.3pt");
+    const qreal factor = qBound(80, layoutScale, 160) / 100.0;
+    const qreal baseBodySize =
+        compact ? compactPointSize : (tightOneColumn ? 8.8 : 9.3);
+    const QString bodySize =
+        QString::number(baseBodySize * factor, 'f', 1) + "pt";
     const QString lineHeight = compact ? "1.0" : (tightOneColumn ? "1.06" : "1.14");
-    const QString sectionMargin = compact ? "0.4mm" : (tightOneColumn ? "0.8mm" : "1.2mm");
-    const QString rowHeight = compact ? "2.1mm" : (tightOneColumn ? "3.2mm" : "3.6mm");
-    const QString titleSize = compact ? "12pt" : (tightOneColumn ? "14pt" : "15pt");
-    const QString artistSize = compact ? "8pt" : (tightOneColumn ? "9.5pt" : "10pt");
+    const QString sectionMargin =
+        QString::number((compact ? 0.4 : (tightOneColumn ? 0.8 : 1.2)) *
+                            factor,
+                        'f', 1) +
+        "mm";
+    const QString rowHeight =
+        QString::number((compact ? 2.1 : (tightOneColumn ? 3.2 : 3.6)) *
+                            factor,
+                        'f', 1) +
+        "mm";
+    const QString titleSize =
+        QString::number((compact ? 12.0 : (tightOneColumn ? 14.0 : 15.0)) *
+                            factor,
+                        'f', 1) +
+        "pt";
+    const QString artistSize =
+        QString::number((compact ? 8.0 : (tightOneColumn ? 9.5 : 10.0)) *
+                            factor,
+                        'f', 1) +
+        "pt";
+    const QString metaSize = QString::number(8.3 * factor, 'f', 1) + "pt";
+    const QString inlineChordSize =
+        QString::number(7.3 * factor, 'f', 1) + "pt";
     return QString(R"(
 @page { size: A4; margin: 8mm; }
 body { font-family:"DejaVu Sans","Arial",sans-serif; color:#161616; font-size:%1; line-height:%2; }
 h1 { font-size:%5; margin:0 0 0.7mm; font-weight:800; text-transform:uppercase; }
 .artist { font-size:%6; font-weight:700; border-bottom:1px solid #777; padding-bottom:1mm; margin-bottom:0.7mm; }
-.meta { color:#555; font-size:8.3pt; margin-bottom:2mm; }
+.meta { color:#555; font-size:%7; margin-bottom:2mm; }
 .section-rule { border:0; border-top:1px solid #999; height:0; margin:%3 0 0.5mm; }
 .section { margin-top:0; padding-top:0; font-weight:700; page-break-after:avoid; }
 .section span { background:#f2dd32; color:#000; border:0.35pt solid #555; padding:0.25mm 1mm; }
@@ -115,13 +136,14 @@ h1 { font-size:%5; margin:0 0 0.7mm; font-weight:800; text-transform:uppercase; 
 .line-pair .chords, .line-pair .lyrics { white-space:pre; }
 .chords { color:#8b6900; font-weight:800; white-space:pre-wrap; margin-top:0.5mm; min-height:%4; page-break-after:avoid; }
 .lyrics { min-height:%4; white-space:pre-wrap; }
-.inline-chord { color:#8b6900; font-weight:800; vertical-align:super; font-size:7.3pt; padding-right:0.8mm; }
+.inline-chord { color:#8b6900; font-weight:800; vertical-align:super; font-size:%8; padding-right:0.8mm; }
 .space { height:0.7mm; }
 .columns { width:100%; border:0; table-layout:fixed; }
 .columns td { width:48%; vertical-align:top; }
 .columns td.gutter { width:4%; }
 .page-break { page-break-before:always; height:0; margin:0; padding:0; font-size:1px; }
-)").arg(bodySize, lineHeight, sectionMargin, rowHeight, titleSize, artistSize);
+)").arg(bodySize, lineHeight, sectionMargin, rowHeight, titleSize, artistSize,
+        metaSize, inlineChordSize);
 }
 
 QList<QStringList> distributeBlocks(const QList<SectionBlock> &blocks, int groupCount)
@@ -243,7 +265,8 @@ QString documentHtml(const Song &song, int columnPages = 0, bool compact = false
         "<!doctype html><html><head><meta charset=\"utf-8\"><style>%1</style></head>"
         "<body><h1>%2</h1><div class=\"artist\">%3</div><div class=\"meta\">%4</div>%5"
         "</body></html>")
-        .arg(stylesheet(compact, compactPointSizeForSong(song), tightOneColumn),
+        .arg(stylesheet(compact, compactPointSizeForSong(song), tightOneColumn,
+                        song.layoutScale),
              escaped(song.title.isEmpty() ? "Unbenannter Song" : song.title),
              escaped(song.artist),
              meta.join(" · "),

@@ -9,6 +9,7 @@
 #include <QFileInfoList>
 #include <QGuiApplication>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QTextDocument>
 #include <QTextStream>
 
@@ -33,14 +34,15 @@ int main(int argc, char *argv[])
 
     for (const QFileInfo &file : files) {
         QProcess process;
-        process.start("pdftotext", {"-raw", file.absoluteFilePath(), "-"});
+        process.start("pdftotext", {"-layout", file.absoluteFilePath(), "-"});
         if (!process.waitForFinished(15000) || process.exitCode() != 0) {
             out << file.fileName() << "\t-\t-\t0\t0\t0\tPDF extraction failed\n";
             ++failures;
             continue;
         }
 
-        const QString extracted = QString::fromUtf8(process.readAllStandardOutput());
+        const QString extracted = ChordParser::normalizePdfColumns(
+            QString::fromUtf8(process.readAllStandardOutput()));
         const Song song = ChordParser::importText(extracted, file.fileName());
         int chordLines = 0;
         int sections = 0;
@@ -59,13 +61,19 @@ int main(int argc, char *argv[])
             valid = valid && sections >= 8;
         if (file.fileName().startsWith("Keeper of the stars"))
             valid = valid && sections >= 5;
+        if (file.fileName() == "Just One Beer.pdf") {
+            valid = valid &&
+                    song.content.contains(
+                        QRegularExpression(R"(^\s*A\s{8,}E\s*$)",
+                                           QRegularExpression::MultilineOption));
+        }
         if (!valid)
             ++failures;
         out << file.fileName() << '\t' << song.title.left(28) << '\t'
             << song.artist.left(20) << '\t' << chordLines << '\t'
             << sections << '\t' << pages << '\t'
             << (valid ? "ok" : "invalid") << '\n';
-        if (valid && !outputDirectory.isEmpty()) {
+        if (!song.content.isEmpty() && !outputDirectory.isEmpty()) {
             QFile output(QDir(outputDirectory).filePath(file.completeBaseName() + ".ricksheet"));
             if (output.open(QIODevice::WriteOnly | QIODevice::Truncate))
                 output.write(song.toJson());
