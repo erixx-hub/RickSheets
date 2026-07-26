@@ -107,7 +107,7 @@ bool showFirstStartWelcome()
     dialog.setStyleSheet(R"(
 QDialog { background:palette(window); color:palette(window-text); }
 QLabel { color:palette(window-text); }
-QLabel#title { color:palette(window-text); font-size:24pt; font-weight:800; }
+QLabel#title { color:palette(window-text); font-size:21pt; font-weight:800; }
 QLabel#subtitle { color:palette(placeholder-text); font-size:10.5pt; }
 QLabel#intro {
   background:palette(base); color:palette(text);
