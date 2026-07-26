@@ -71,7 +71,7 @@ jobs:
           $root = Get-ChildItem $unpackDir -Directory | Select-Object -First 1
           $appDir = "$pwd/dist/windows/RickSheets"
           Copy-Item "$($root.FullName)/Library/bin/*" $appDir -Recurse -Force
-          Copy-Item "$($root.FullName)/share" "$appDir/share" -Recurse -Force
+          Copy-Item "$($root.FullName)/share/*" "$appDir/share" -Recurse -Force
 
       - name: Verify portable package
         shell: pwsh
