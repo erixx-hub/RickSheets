@@ -202,7 +202,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::buildUi()
 {
-    setWindowTitle("RickSheets");
+    setWindowTitle(QString("RickSheets %1").arg(QApplication::applicationVersion()));
     setWindowIcon(QIcon(":/brand/de.rickrich.RickSheets.png"));
     resize(1480, 900);
     setMinimumSize(1000, 680);
@@ -222,6 +222,10 @@ void MainWindow::buildUi()
     m_brand->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     m_brand->setPixmap(wordmarkForPalette(palette()));
     m_brand->setAccessibleName(tr("RickSheets"));
+    m_versionLabel =
+        new QLabel(tr("Version %1").arg(QApplication::applicationVersion()));
+    m_versionLabel->setObjectName("applicationVersion");
+    m_versionLabel->setProperty("muted", true);
     auto *libraryLabel = new QLabel(tr("BIBLIOTHEK"));
     libraryLabel->setObjectName("sectionHeading");
     markForTranslation(libraryLabel, "BIBLIOTHEK");
@@ -267,6 +271,7 @@ void MainWindow::buildUi()
     connect(m_deleteLibraryButton, &QPushButton::clicked,
             this, &MainWindow::deleteLibrarySong);
     libraryLayout->addWidget(m_brand);
+    libraryLayout->addWidget(m_versionLabel);
     libraryLayout->addSpacing(4);
     libraryLayout->addWidget(libraryLabel);
     libraryLayout->addWidget(m_librarySearch);
@@ -590,6 +595,8 @@ void MainWindow::retranslateUi()
     }
 
     m_brand->setAccessibleName(tr("RickSheets"));
+    m_versionLabel->setText(
+        tr("Version %1").arg(QApplication::applicationVersion()));
     m_capoEdit->setSpecialValueText(tr("kein"));
     updatePageStatus(m_pageCount);
     refreshLibrary(m_librarySearch->text());
@@ -1195,5 +1202,7 @@ void MainWindow::setDirty(bool dirty)
     const QString title = m_titleEdit && !m_titleEdit->text().isEmpty()
                               ? m_titleEdit->text()
                               : tr("RickSheets");
-    setWindowTitle(QString("%1%2 – RickSheets").arg(title, dirty ? " *" : ""));
+    setWindowTitle(QString("%1%2 – RickSheets %3")
+                       .arg(title, dirty ? " *" : "",
+                            QApplication::applicationVersion()));
 }

@@ -73,6 +73,7 @@ private:
     QLineEdit *m_librarySearch = nullptr;
     QPushButton *m_deleteLibraryButton = nullptr;
     QLabel *m_brand = nullptr;
+    QLabel *m_versionLabel = nullptr;
     QLineEdit *m_titleEdit = nullptr;
     QLineEdit *m_artistEdit = nullptr;
     QLineEdit *m_keyEdit = nullptr;

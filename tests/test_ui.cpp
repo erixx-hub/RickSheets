@@ -48,6 +48,7 @@ void UiTest::initTestCase()
 {
     QCoreApplication::setOrganizationName("RickSheets");
     QCoreApplication::setApplicationName("RickSheetsUiTests");
+    QCoreApplication::setApplicationVersion("0.3.4");
     const QString settingsDirectory =
         QDir::temp().filePath("ricksheets-ui-test-settings");
     QVERIFY(QDir().mkpath(settingsDirectory));
@@ -220,6 +221,10 @@ void UiTest::createsAndRendersMainWindow()
     auto *wordmark = window.findChild<QLabel *>("brandWordmark");
     QVERIFY(wordmark);
     QVERIFY(!wordmark->pixmap().isNull());
+    auto *version = window.findChild<QLabel *>("applicationVersion");
+    QVERIFY(version);
+    QCOMPARE(version->text(), QString("Version 0.3.4"));
+    QVERIFY(window.windowTitle().contains("0.3.4"));
     auto *library = window.findChild<QListWidget *>("songLibrary");
     auto *search = window.findChild<QLineEdit *>("librarySearch");
     auto *arrangement = window.findChild<QPlainTextEdit *>("arrangementEditor");
