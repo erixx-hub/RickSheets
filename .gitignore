@@ -1,0 +1,17 @@
+/build/
+/build-release/
+/dist/
+/.cache/
+/.agents/
+/.codex/
+*.user
+*.autosave
+
+# Local recovery notes and imported/test material. These files stay on the
+# development machine and are not part of the public source distribution.
+/WORKING_STATE.md
+/*.pdf
+/*.ricksheet
+/docs/*.pdf
+/docs/*.png
+/examples/*.ricksheet

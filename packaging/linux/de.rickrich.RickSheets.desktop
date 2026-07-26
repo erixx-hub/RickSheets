@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=RickSheets
+Comment=Chordsheets importieren, bearbeiten und als PDF exportieren
+Exec=ricksheets %F
+Icon=de.rickrich.RickSheets
+Terminal=false
+Categories=AudioVideo;Audio;
+MimeType=application/x-ricksheet;
+StartupNotify=true
+StartupWMClass=ricksheets
