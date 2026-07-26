@@ -256,6 +256,12 @@ void UiTest::createsAndRendersMainWindow()
     QVERIFY(QApplication::palette().color(QPalette::Window).lightness() >= 128);
     QVERIFY(QMetaObject::invokeMethod(&window, "setDarkTheme"));
     QVERIFY(QApplication::palette().color(QPalette::Window).lightness() < 128);
+    qApp->setProperty("ricksheetsSystemDark", true);
+    QVERIFY(QMetaObject::invokeMethod(&window, "setSystemTheme"));
+    QVERIFY(QApplication::palette().color(QPalette::Window).lightness() < 128);
+    qApp->setProperty("ricksheetsSystemDark", false);
+    QVERIFY(QMetaObject::invokeMethod(&window, "setSystemTheme"));
+    QVERIFY(QApplication::palette().color(QPalette::Window).lightness() >= 128);
     if (qEnvironmentVariable("RICKSHEETS_SCREENSHOT_THEME").compare("light", Qt::CaseInsensitive) == 0)
         QVERIFY(QMetaObject::invokeMethod(&window, "setLightTheme"));
 

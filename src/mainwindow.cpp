@@ -149,55 +149,6 @@ QPixmap wordmarkForPalette(const QPalette &palette)
     return QPixmap::fromImage(image);
 }
 
-QPalette darkPalette()
-{
-    QPalette palette;
-    palette.setColor(QPalette::Window, QColor("#191b1f"));
-    palette.setColor(QPalette::WindowText, QColor("#eeeeee"));
-    palette.setColor(QPalette::Base, QColor("#22252a"));
-    palette.setColor(QPalette::AlternateBase, QColor("#282c32"));
-    palette.setColor(QPalette::ToolTipBase, QColor("#eeeeee"));
-    palette.setColor(QPalette::ToolTipText, QColor("#171717"));
-    palette.setColor(QPalette::Text, QColor("#eeeeee"));
-    palette.setColor(QPalette::Button, QColor("#30343b"));
-    palette.setColor(QPalette::ButtonText, QColor("#eeeeee"));
-    palette.setColor(QPalette::BrightText, Qt::white);
-    palette.setColor(QPalette::Highlight, QColor("#d8c126"));
-    palette.setColor(QPalette::HighlightedText, QColor("#171717"));
-    palette.setColor(QPalette::PlaceholderText, QColor("#a5a5a5"));
-    palette.setColor(QPalette::Mid, QColor("#41464f"));
-    palette.setColor(QPalette::Midlight, QColor("#353a42"));
-    palette.setColor(QPalette::Light, QColor("#3b4048"));
-    palette.setColor(QPalette::Shadow, QColor("#101216"));
-    palette.setColor(QPalette::Disabled, QPalette::Text, QColor("#888888"));
-    palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#888888"));
-    return palette;
-}
-
-QPalette lightPalette()
-{
-    QPalette palette;
-    palette.setColor(QPalette::Window, QColor("#f3f1eb"));
-    palette.setColor(QPalette::WindowText, QColor("#171717"));
-    palette.setColor(QPalette::Base, Qt::white);
-    palette.setColor(QPalette::AlternateBase, QColor("#f7f5ef"));
-    palette.setColor(QPalette::ToolTipBase, QColor("#fffbe8"));
-    palette.setColor(QPalette::ToolTipText, QColor("#171717"));
-    palette.setColor(QPalette::Text, QColor("#171717"));
-    palette.setColor(QPalette::Button, QColor("#ece9e1"));
-    palette.setColor(QPalette::ButtonText, QColor("#171717"));
-    palette.setColor(QPalette::BrightText, Qt::white);
-    palette.setColor(QPalette::Highlight, QColor("#d8c126"));
-    palette.setColor(QPalette::HighlightedText, QColor("#171717"));
-    palette.setColor(QPalette::PlaceholderText, QColor("#777777"));
-    palette.setColor(QPalette::Mid, QColor("#d7d2c7"));
-    palette.setColor(QPalette::Midlight, QColor("#e4e0d7"));
-    palette.setColor(QPalette::Light, QColor("#f5f3ed"));
-    palette.setColor(QPalette::Shadow, QColor("#aaa59a"));
-    palette.setColor(QPalette::Disabled, QPalette::Text, QColor("#888888"));
-    palette.setColor(QPalette::Disabled, QPalette::ButtonText, QColor("#888888"));
-    return palette;
-}
 }
 
 MainWindow::MainWindow(QWidget *parent)
@@ -623,20 +574,7 @@ void MainWindow::setEnglishLanguage()
 
 void MainWindow::applyTheme(const QString &theme)
 {
-    QString effectiveTheme = theme;
-    if (effectiveTheme == "system") {
-        effectiveTheme =
-            QApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark
-                ? "dark"
-                : "light";
-    }
-    const QPalette selectedPalette =
-        effectiveTheme == "dark" ? darkPalette() : lightPalette();
-    QApplication::setPalette(selectedPalette);
-    for (QWidget *widget : QApplication::allWidgets()) {
-        widget->setPalette(selectedPalette);
-        widget->update();
-    }
+    applyRickSheetsTheme(*qApp, theme);
     QSettings().setValue("appearance/theme", theme);
     if (m_brand)
         m_brand->setPixmap(wordmarkForPalette(QApplication::palette()));

@@ -14,13 +14,16 @@
 #include <QFont>
 #include <QHBoxLayout>
 #include <QIcon>
+#include <QImage>
 #include <QLabel>
+#include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
 #include <QSaveFile>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QStyleFactory>
+#include <QStyleHints>
 #include <QVBoxLayout>
 
 namespace {
@@ -82,7 +85,10 @@ bool showFirstStartWelcome()
 {
     QSettings settings;
     constexpr int onboardingVersion = 3;
-    if (settings.value("onboarding/version", 0).toInt() >= onboardingVersion) {
+    const bool captureOnboarding =
+        !qEnvironmentVariable("RICKSHEETS_ONBOARDING_SCREENSHOT").isEmpty();
+    if (!captureOnboarding &&
+        settings.value("onboarding/version", 0).toInt() >= onboardingVersion) {
         const QString desktopFile = QDir(
             QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
                                         .filePath(
@@ -99,25 +105,19 @@ bool showFirstStartWelcome()
     dialog.setWindowIcon(QIcon(":/brand/de.rickrich.RickSheets.png"));
     dialog.setFixedSize(650, 540);
     dialog.setStyleSheet(R"(
-QDialog { background:#f5f2e9; color:#171717; }
-QLabel#title { font-size:24pt; font-weight:800; }
-QLabel#subtitle { color:#605d56; font-size:10.5pt; }
+QDialog { background:palette(window); color:palette(window-text); }
+QLabel { color:palette(window-text); }
+QLabel#title { color:palette(window-text); font-size:24pt; font-weight:800; }
+QLabel#subtitle { color:palette(placeholder-text); font-size:10.5pt; }
 QLabel#intro {
-  background:#ffffff; border:1px solid #d8d3c7; border-radius:10px;
+  background:palette(base); color:palette(text);
+  border:1px solid palette(mid); border-radius:10px;
   padding:16px; font-size:10.5pt;
 }
 QPushButton {
   border-radius:10px; padding:14px; font-size:12pt; font-weight:700;
   min-height:58px;
 }
-QPushButton#lightChoice {
-  background:#ffffff; color:#171717; border:2px solid #c6b21e;
-}
-QPushButton#lightChoice:hover { background:#fffbea; }
-QPushButton#darkChoice {
-  background:#242424; color:#f3efe4; border:2px solid #c6b21e;
-}
-QPushButton#darkChoice:hover { background:#343434; }
 )");
 
     auto *layout = new QVBoxLayout(&dialog);
@@ -126,8 +126,11 @@ QPushButton#darkChoice:hover { background:#343434; }
 
     auto *header = new QHBoxLayout;
     auto *logo = new QLabel;
+    const bool darkOnboarding =
+        qApp->palette().color(QPalette::Window).lightness() < 128;
     logo->setPixmap(
-        QPixmap(":/brand/de.rickrich.RickSheets.png")
+        QPixmap(darkOnboarding ? ":/brand/ricksheets-icon-light.svg"
+                               : ":/brand/ricksheets-icon-dark.svg")
             .scaled(76, 76, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     auto *heading = new QVBoxLayout;
     auto *title = new QLabel(QObject::tr("Willkommen bei RickSheets"));
@@ -161,8 +164,16 @@ QPushButton#darkChoice:hover { background:#343434; }
     choices->setSpacing(12);
     auto *light = new QPushButton(QObject::tr("☀  Helle Darstellung"));
     light->setObjectName("lightChoice");
+    light->setStyleSheet(
+        "QPushButton { background:#ffffff; color:#171717; "
+        "border:2px solid #c6b21e; }"
+        "QPushButton:hover { background:#fffbea; }");
     auto *dark = new QPushButton(QObject::tr("●  Dunkle Darstellung"));
     dark->setObjectName("darkChoice");
+    dark->setStyleSheet(
+        "QPushButton { background:#242424; color:#f3efe4; "
+        "border:2px solid #c6b21e; }"
+        "QPushButton:hover { background:#343434; }");
     choices->addWidget(light);
     choices->addWidget(dark);
     layout->addLayout(choices);
@@ -202,6 +213,20 @@ QPushButton#darkChoice:hover { background:#343434; }
             integrateAppImage();
         dialog.accept();
     });
+
+    const QString screenshotPath =
+        qEnvironmentVariable("RICKSHEETS_ONBOARDING_SCREENSHOT");
+    if (!screenshotPath.isEmpty()) {
+        dialog.show();
+        QApplication::processEvents();
+        QImage image(dialog.size(), QImage::Format_ARGB32_Premultiplied);
+        image.fill(Qt::transparent);
+        QPainter painter(&image);
+        dialog.render(&painter);
+        painter.end();
+        image.save(screenshotPath);
+        return false;
+    }
     return dialog.exec() == QDialog::Accepted;
 }
 }
@@ -215,9 +240,24 @@ int main(int argc, char *argv[])
     application.setApplicationVersion(RICKSHEETS_VERSION);
     application.setDesktopFileName("io.github.erixx_hub.RickSheets");
     application.setWindowIcon(QIcon(":/brand/de.rickrich.RickSheets.png"));
+    bool systemDark =
+        application.styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+    if (application.styleHints()->colorScheme() == Qt::ColorScheme::Unknown)
+        systemDark =
+            application.palette().color(QPalette::Window).lightness() < 128;
+    const QString testTheme =
+        qEnvironmentVariable("RICKSHEETS_TEST_SYSTEM_THEME").toLower();
+    if (testTheme == "dark" || testTheme == "light")
+        systemDark = testTheme == "dark";
+    application.setProperty("ricksheetsSystemDark", systemDark);
     application.setStyle(QStyleFactory::create("Fusion"));
     application.setStyleSheet(rickSheetsStyleSheet());
     applyRickSheetsLanguage(application);
+    const QString themePreference =
+        testTheme == "dark" || testTheme == "light"
+            ? "system"
+            : QSettings().value("appearance/theme", "system").toString();
+    applyRickSheetsTheme(application, themePreference);
 
     QFont font("DejaVu Sans");
     font.setPointSize(10);
