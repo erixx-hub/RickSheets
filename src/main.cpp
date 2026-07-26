@@ -40,7 +40,7 @@ void integrateAppImage()
 
     QFile embeddedIcon(":/brand/de.rickrich.RickSheets.png");
     const QString installedIconPath =
-        QDir(iconDirectory).filePath("de.rickrich.RickSheets.png");
+        QDir(iconDirectory).filePath("io.github.erixx_hub.RickSheets.png");
     QSaveFile installedIcon(installedIconPath);
     if (embeddedIcon.open(QIODevice::ReadOnly) &&
         installedIcon.open(QIODevice::WriteOnly)) {
@@ -52,7 +52,8 @@ void integrateAppImage()
     escapedPath.replace("\\", "\\\\");
     escapedPath.replace("\"", "\\\"");
     QSaveFile desktopFile(
-        QDir(applicationsDirectory).filePath("de.rickrich.RickSheets.desktop"));
+        QDir(applicationsDirectory)
+            .filePath("io.github.erixx_hub.RickSheets.desktop"));
     if (desktopFile.open(QIODevice::WriteOnly)) {
         const QString contents = QString(
             "[Desktop Entry]\n"
@@ -86,7 +87,7 @@ bool showFirstStartWelcome()
             QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation))
                                         .filePath(
                                             "applications/"
-                                            "de.rickrich.RickSheets.desktop");
+                                            "io.github.erixx_hub.RickSheets.desktop");
         if (!qEnvironmentVariable("APPIMAGE").isEmpty() &&
             QFileInfo::exists(desktopFile))
             integrateAppImage();
@@ -212,7 +213,7 @@ int main(int argc, char *argv[])
     application.setApplicationDisplayName("RickSheets");
     application.setOrganizationName("RickSheets");
     application.setApplicationVersion(RICKSHEETS_VERSION);
-    application.setDesktopFileName("de.rickrich.RickSheets");
+    application.setDesktopFileName("io.github.erixx_hub.RickSheets");
     application.setWindowIcon(QIcon(":/brand/de.rickrich.RickSheets.png"));
     application.setStyle(QStyleFactory::create("Fusion"));
     application.setStyleSheet(rickSheetsStyleSheet());

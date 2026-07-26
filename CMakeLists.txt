@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.24)
-project(RickSheets VERSION 0.3.1 LANGUAGES CXX)
+project(RickSheets VERSION 0.3.2 LANGUAGES CXX)
 
 include(GNUInstallDirs)
+
+set(RICKSHEETS_APP_ID "io.github.erixx_hub.RickSheets")
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -113,10 +115,19 @@ if(PDFTOTEXT_EXECUTABLE)
 endif()
 
 install(TARGETS ricksheets RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
-install(FILES packaging/linux/de.rickrich.RickSheets.desktop
+install(FILES packaging/linux/${RICKSHEETS_APP_ID}.desktop
         DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+install(FILES packaging/linux/${RICKSHEETS_APP_ID}.metainfo.xml
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 install(FILES docs/Logo/ricksheets-icon-dark.svg
         DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
-        RENAME de.rickrich.RickSheets.svg)
-install(DIRECTORY packaging/linux/icons/hicolor/
-        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor)
+        RENAME ${RICKSHEETS_APP_ID}.svg)
+foreach(icon_size 48 64 128 256)
+    install(FILES
+        packaging/linux/icons/hicolor/${icon_size}x${icon_size}/apps/de.rickrich.RickSheets.png
+        DESTINATION
+        ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${icon_size}x${icon_size}/apps
+        RENAME ${RICKSHEETS_APP_ID}.png)
+endforeach()
+install(FILES LICENSE
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/licenses/${RICKSHEETS_APP_ID})

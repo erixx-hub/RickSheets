@@ -6,7 +6,7 @@ PDF files into clean, consistent and printable A4 chord sheets.
 The application focuses on one workflow: import an imperfect source, review
 the detected song, correct lyrics and chords, and export a dependable PDF.
 
-> RickSheets 0.3.1 is an early release. The interface is available in German
+> RickSheets 0.3.2 is an early release. The interface is available in German
 > and English.
 
 ## Features
@@ -56,6 +56,22 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ./build/ricksheets
 ```
+
+## Building the Flatpak
+
+Install `flatpak`, `flatpak-builder` and the Flathub remote, then build and
+install the development manifest:
+
+```bash
+flatpak-builder --user --install-deps-from=flathub \
+  --install --force-clean build-flatpak \
+  packaging/flatpak/io.github.erixx_hub.RickSheets.yml
+flatpak run io.github.erixx_hub.RickSheets
+```
+
+The package builds RickSheets and the two required Poppler utilities from
+source. It has no network permission and no broad host-filesystem permission;
+opening and exporting files uses the desktop file chooser.
 
 ## Windows
 
@@ -112,7 +128,7 @@ src/renderer.*      Shared preview and PDF layout
 src/previewwidget.* A4 page preview and PDF export
 src/mainwindow.*    Desktop user interface
 tests/              Automated core and UI tests
-packaging/          Linux desktop integration and AppImage tooling
+packaging/          Linux desktop, Flatpak and AppImage packaging
 ```
 
 ## Roadmap and contributions

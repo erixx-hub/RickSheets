@@ -1,5 +1,7 @@
 /build/
 /build-release/
+/build-flatpak/
+/.flatpak-builder/
 /dist/
 /.cache/
 /.agents/

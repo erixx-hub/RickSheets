@@ -50,10 +50,21 @@ trap cleanup EXIT HUP INT TERM
     "$seed_appimage" --appimage-extract >/dev/null
 )
 app_dir="$work_dir/squashfs-root"
-install -m 0755 "$binary" "$app_dir/usr/bin/ricksheets"
+cmake --install "$project_root/build-release" --prefix "$app_dir/usr"
 if [ -n "$pdftoppm" ] && [ -x "$pdftoppm" ]; then
     install -m 0755 "$pdftoppm" "$app_dir/usr/bin/pdftoppm"
 fi
+
+# Replace the historical pre-GitHub desktop integration inherited from the
+# seed image. The files below only exist in the fresh temporary AppDir.
+rm -f -- \
+    "$app_dir/de.rickrich.RickSheets.desktop" \
+    "$app_dir/de.rickrich.RickSheets.png" \
+    "$app_dir/usr/share/applications/de.rickrich.RickSheets.desktop"
+cp "$app_dir/usr/share/applications/io.github.erixx_hub.RickSheets.desktop" \
+   "$app_dir/io.github.erixx_hub.RickSheets.desktop"
+cp "$app_dir/usr/share/icons/hicolor/256x256/apps/io.github.erixx_hub.RickSheets.png" \
+   "$app_dir/io.github.erixx_hub.RickSheets.png"
 
 if ! LD_LIBRARY_PATH="$app_dir/usr/lib" ldd "$app_dir/usr/bin/ricksheets" |
      grep -q "$app_dir/usr/lib/libQt6Core"; then

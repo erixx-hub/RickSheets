@@ -268,13 +268,18 @@ void UiTest::createsAndRendersMainWindow()
     QTest::keyClicks(arrangement, "G");
     QCOMPARE(arrangement->toPlainText().split('\n').at(1), QString("A G     D"));
 
+    const QString screenshotPath = qEnvironmentVariable("RICKSHEETS_SCREENSHOT");
+    if (!screenshotPath.isEmpty()) {
+        window.setMinimumSize(1000, 680);
+        window.resize(1200, 750);
+        QCoreApplication::processEvents();
+    }
     QImage image(window.size(), QImage::Format_ARGB32_Premultiplied);
     image.fill(Qt::transparent);
     QPainter painter(&image);
     window.render(&painter);
     painter.end();
     QVERIFY(!image.isNull());
-    const QString screenshotPath = qEnvironmentVariable("RICKSHEETS_SCREENSHOT");
     if (!screenshotPath.isEmpty())
         QVERIFY(image.save(screenshotPath));
 

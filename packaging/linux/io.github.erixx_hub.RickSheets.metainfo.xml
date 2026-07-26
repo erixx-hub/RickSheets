@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2026 Erik Heidenreich -->
+<component type="desktop-application">
+  <id>io.github.erixx_hub.RickSheets</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+
+  <name>RickSheets</name>
+  <summary>Turn chord-sheet text and PDFs into clean printable sheets</summary>
+  <summary xml:lang="de">Chordsheet-Texte und PDFs sauber druckbar machen</summary>
+
+  <developer id="io.github.erixx_hub">
+    <name>Erik Heidenreich</name>
+  </developer>
+
+  <description>
+    <p>
+      RickSheets imports pasted chord-sheet text and text-based PDF files,
+      removes common source clutter, and turns the result into a consistent
+      editable song sheet.
+    </p>
+    <p>
+      Review the detected song beside the original PDF page, adjust sections
+      and chord positions visually, transpose the song, and export the same A4
+      layout shown in the live preview.
+    </p>
+    <p>
+      Songs are stored locally in an open JSON-based format. The interface is
+      available in English and German.
+    </p>
+    <p xml:lang="de">
+      RickSheets importiert eingefügten Chordsheet-Text und textbasierte
+      PDF-Dateien, entfernt typisches Quellenbeiwerk und erzeugt daraus ein
+      einheitliches, bearbeitbares Songblatt.
+    </p>
+    <p xml:lang="de">
+      Prüfe den erkannten Song neben der ursprünglichen PDF-Seite, bearbeite
+      Abschnitte und Akkordpositionen visuell, transponiere den Song und
+      exportiere exakt das A4-Layout der Livevorschau.
+    </p>
+    <p xml:lang="de">
+      Songs werden lokal in einem offenen JSON-Format gespeichert. Die
+      Oberfläche ist auf Deutsch und Englisch verfügbar.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">io.github.erixx_hub.RickSheets.desktop</launchable>
+  <provides>
+    <binary>ricksheets</binary>
+  </provides>
+
+  <url type="homepage">https://github.com/erixx-hub/RickSheets</url>
+  <url type="bugtracker">https://github.com/erixx-hub/RickSheets/issues</url>
+  <url type="vcs-browser">https://github.com/erixx-hub/RickSheets</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/erixx-hub/RickSheets/v0.3.2/docs/screenshots/ricksheets-main-en.png</image>
+      <caption>Edit a song while previewing its printable A4 layout</caption>
+      <caption xml:lang="de">Song bearbeiten und gleichzeitig das druckbare A4-Layout prüfen</caption>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="0.3.2" date="2026-07-26">
+      <description>
+        <p>Added AppStream metadata, a sandboxed Flatpak build and consistent Linux desktop integration.</p>
+      </description>
+    </release>
+    <release version="0.3.1" date="2026-07-26">
+      <description>
+        <p>Switch instantly between the complete English and German interfaces without changing song content.</p>
+      </description>
+    </release>
+    <release version="0.3.0" date="2026-07-26">
+      <description>
+        <p>Added complete English localization with automatic system-language selection.</p>
+      </description>
+    </release>
+    <release version="0.2.0" date="2026-07-26">
+      <description>
+        <p>Introduced the modern light and dark interface and hardened visual editing across the PDF regression set.</p>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1"/>
+</component>

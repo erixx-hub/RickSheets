@@ -240,7 +240,7 @@ void MainWindow::buildUi()
     setWindowTitle("RickSheets");
     setWindowIcon(QIcon(":/brand/de.rickrich.RickSheets.png"));
     resize(1480, 900);
-    setMinimumSize(1040, 680);
+    setMinimumSize(1000, 680);
 
     auto *splitter = new QSplitter(this);
     splitter->setChildrenCollapsible(false);

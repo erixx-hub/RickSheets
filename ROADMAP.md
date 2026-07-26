@@ -21,12 +21,14 @@ The `.ricksheet` file format will remain language-neutral. Section names in a
 song belong to user content and will not change merely because the interface
 language changes.
 
-## Publication readiness
+## In progress: publication readiness
 
-- Add AppStream metadata, release notes and store screenshots.
-- Build RickSheets reproducibly as a sandboxed Flatpak.
-- Validate desktop, icon, metainfo and Flatpak manifests.
-- Test file import, local library storage and PDF export through the sandbox.
+- [x] Add AppStream metadata, release notes and a store screenshot.
+- [x] Build RickSheets reproducibly as a sandboxed Flatpak.
+- [x] Validate desktop, icon, metainfo and Flatpak manifests.
+- [x] Test bundled PDF extraction and page rendering in the sandbox.
+- [ ] Test file chooser portals, persistent library storage and PDF export
+  interactively.
 - Submit the package for review on Flathub.
 
 ## Editing and print control
